@@ -1,0 +1,66 @@
+
+
+
+  <div class="container-fluid">
+    <div class="row no-gutter">
+        
+        <div class="col-md-6 d-none d-md-flex bg-image"></div>
+
+
+        
+        <div class="col-md-6 bg-light">
+            <div class="register d-flex align-items-center py-5">
+
+                
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10 col-xl-7 mx-auto">
+                        
+                            <form class="form-container" novalidate [formGroup]="registerform" #formDirective="ngForm" (ngSubmit)="register(formDirective)" style="text-align: center;">
+                              <mat-card style="text-align: center;">
+                               
+                              <mat-card-title>Register</mat-card-title>
+                                   
+                                <mat-card-content>
+                                    
+                                  <div class="row">
+                          
+                                      <div class="col-md-6 col-lg-12">
+                                          <mat-form-field appearance="outline">
+                                              <mat-label>Username</mat-label>
+                                              <input matInput placeholder="Enter your username"  [(ngModel)]="credentials.username" formControlName="username"> 
+                                            </mat-form-field>
+                                        </div>
+                                    <div class="col-md-6 col-lg-12">
+                                      <mat-form-field appearance="outline">
+                                          <mat-label>Email Address</mat-label>
+                                          <input matInput placeholder="Enter your email address"  [(ngModel)]="credentials.email" formControlName="email">
+                                          
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6 col-lg-12">
+                                      <mat-form-field appearance="outline">
+                                          <mat-label>Password</mat-label>
+                                          <input matInput type="password" placeholder="Enter your password"   [(ngModel)]="credentials.password" formControlName="password"> 
+                                        </mat-form-field>
+                                    </div>
+                                  </div>
+                                  
+                                </mat-card-content>
+                                <mat-card-actions>
+                                  <button mat-raised-button=""  color="primary"  style="margin-bottom: 10px;">Submit</button>
+                                </mat-card-actions>
+                                <br>
+                                <a mat-button routerLink="/login" >Registered? Sign In</a>
+                              </mat-card>
+                              
+                            </form>
+                        </div>
+                    </div>
+                </div><!-- End -->
+
+            </div>
+        </div><!-- End -->
+
+    </div>
+</div>

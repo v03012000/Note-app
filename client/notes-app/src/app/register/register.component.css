@@ -1,0 +1,24 @@
+
+
+.form-container{
+    margin-top: 50px;
+
+}
+
+.form-container>mat-card{
+    width:100%;
+    
+}
+.mat-card-title{
+    
+    margin-bottom: 30px;
+}
+.register,
+.image {
+    min-height: 100vh;
+  }
+.bg-image {
+    background-image: url('../../assets/images/register1.jpg');
+    background-size: cover;
+    background-position: center center;
+  }
