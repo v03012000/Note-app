@@ -1,0 +1,61 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span></span>
+    <span class="example-spacer"></span>
+  </mat-toolbar>
+
+  <div class="container-fluid">
+  <div>
+        <h1 style="text-align:center;margin-top: 50px">Manage your uploads</h1>
+  </div>
+  <div class="add-notes" style="margin-left:10%; margin-top:5%">
+    <h2 strong>Add notes  - Only PDF's</h2>
+    
+    <form [formGroup]="myForm" enctype="multipart/form-data" method="post"  #formDirective="ngForm" (ngSubmit)="onSubmit(formDirective,variable)">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Major</mat-label>
+        <mat-select (selectionChange)="majorChanged($event)" formControlName="Major">
+          <mat-option *ngFor="let major of majors" [value]="major" >
+            {{major}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Passing year</mat-label>
+        <mat-select formControlName="Year" >
+          <mat-option *ngFor="let year of years" [value]="year">
+            {{year}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Subject</mat-label>
+        <mat-select formControlName="Subject" [disabled]="subjects.length==0">
+          <mat-option *ngFor="let subject of subjects" [value]="subject">
+            {{subject}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div>
+    <input
+    style="width: 65%;left:40px"  
+    id="file" 
+    type="file" 
+    name="samplefile"
+    class="form-control"
+    #variable
+    (change)="onFileInput($event)" accept=".pdf"/>
+    <button style="margin-top:20px" type="submit" [disabled]="!myForm.valid" mat-raised-button color="primary">
+  Submit
+</button> 
+</div>
+</form>   
+  </div>
+  </div>
+

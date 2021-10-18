@@ -1,11 +1,14 @@
 let mongoose = require('mongoose');
 let gracefulShutdown;
 let dbURI = 'mongodb://localhost/notesapp';
+//'mongodb+srv://vidushi:Tickoo@123@cluster0.qwsmh.mongodb.net/notesapp?retryWrites=true&w=majority';
+//'mongodb://localhost/notesapp';
 
 
-mongoose.connect(dbURI);
+
 
 // CONNECTION EVENTS
+mongoose.connect(dbURI);
 mongoose.connection.on('connected', function() {
   console.log('Mongoose connected to ' + dbURI);
 });

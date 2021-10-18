@@ -7,8 +7,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule} from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule} from '@angular/material/toolbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,12 +18,16 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './services/auth-guard.service';
 import { AuthenticationService } from './services/authentication.service';
+import { UploadsComponent } from './uploads/uploads.component';
+
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: '' }
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuardService]  },
+  //{ path: '**', redirectTo: '' },
+  { path: 'uploads', component: UploadsComponent, canActivate: [AuthGuardService]  },
   
 ];
 @NgModule({
@@ -29,7 +35,9 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    UploadsComponent,
+   
   ],
   imports: [
     BrowserModule,
@@ -39,6 +47,8 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatCardModule,
     MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

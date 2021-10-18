@@ -9,11 +9,6 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
- /* form = new FormGroup({
-    email: new FormControl('Nancy'),
-    username: new FormControl('Drew'),
-    password: new FormControl('hello', Validators.minLength(4))
-  });*/
   registerform!: FormGroup;
   username!: FormControl;
   password!: FormControl;
