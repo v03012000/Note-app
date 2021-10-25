@@ -13,12 +13,16 @@ import { TokenResponse,TokenPayload } from '../interfaces/Tokens';
 
 export class AuthenticationService {
   private token!: string|null;
-
+  private role!:string|null;
   constructor(private http: HttpClient, private router: Router) {}
 
   private saveToken(token: string): void {
     localStorage.setItem('token', token);
     this.token = token;
+  }
+  private saveRole(role: string): void {
+    localStorage.setItem('role', role);
+    this.role = role;
   }
 
   private getToken(): string|null {
@@ -30,8 +34,10 @@ export class AuthenticationService {
 
   public logout(): void {
     this.token = '';
+    this.role  = '';
     window.localStorage.removeItem('token');
-    this.router.navigateByUrl('/');
+    window.localStorage.removeItem('role');
+    this.router.navigateByUrl('/login');
   }
   public getUserDetails(): UserDetails| null {
     const token = this.getToken();
@@ -48,7 +54,7 @@ export class AuthenticationService {
   public isLoggedIn(): boolean {
     const user = this.getUserDetails();
     if (user) {
-      return user.exp > Date.now() / 1000;
+      return localStorage.getItem('token')!==null;
     } else {
       return false;
     }
@@ -65,7 +71,9 @@ export class AuthenticationService {
 
     const request = base.pipe(
      map((data:any) => {
+       console.log(data);
         if (data.token) {
+          this.saveRole(data.role);
           this.saveToken(data.token);
         }
         return data;
@@ -83,9 +91,12 @@ export class AuthenticationService {
     return this.request('post', 'login', user);
   }
 
-  public profile(): Observable<any> {
-    return this.request('get', 'home');
+  public isAdmin():boolean{
+    this.role = localStorage.getItem('role');
+    return this.role==="admin";
   }
+   
+  
 
 
 }

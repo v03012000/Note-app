@@ -22,7 +22,6 @@ app.use(passport.session());
 
 var routesApi = require('./api/routes/index');
 app.use('/api', routesApi);
-
 app.get('/',function(req,res)
 {
 res.send("Hello World!");

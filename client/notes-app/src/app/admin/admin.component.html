@@ -1,0 +1,40 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span ></span>
+    <span class="example-spacer" style="margin-left:20%">Note It Down</span>
+    <div>
+      <a mat-button routerLink="" (click)="auth.logout()">Logout</a>
+    </div> 
+  </mat-toolbar>
+
+  <div class="container-fluid">
+    <div>
+        <h1 style="text-align:center;margin-top: 50px">Newly uploaded notes</h1>
+    </div>
+    <div class="newly-uploads" style="margin-left:10%; width:80%; margin-top:5%">
+    <mat-accordion *ngFor="let file of uploadsArray">
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{file.metadata.filename}}
+      </mat-panel-title>
+      <mat-panel-description>
+       {{file.metadata.year}}
+      </mat-panel-description>
+      <mat-panel-description>
+        {{file.metadata.subject}}
+       </mat-panel-description>
+       <mat-panel-description>
+        {{file.metadata.major}}
+       </mat-panel-description>
+    </mat-expansion-panel-header>
+    <button mat-raised-button (click)="deleteFile(file)">Delete notes</button>
+    <button mat-raised-button (click)="openFile(file)">Open notes</button>
+    <button mat-raised-button (click)="verifyFile(file)">Check verified</button>
+    </mat-expansion-panel>
+  </mat-accordion>   
+        
+    </div>
+    </div>

@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('express-jwt');
 const util = require("util");
-
+const multer = require("multer");
+const path=require('path');
 var auth = jwt({
   secret: "MY_SECRET",
   userProperty: 'payload',
@@ -11,53 +12,29 @@ var auth = jwt({
 
 var ctrlHome = require('../controllers/home');
 var ctrlAuth = require('../controllers/authentication');
-let controller = require("../controllers/file.controller");
-// profile
+let ctrlFile = require("../controllers/file.controller");
+let ctrlAdmin= require("../controllers/admin");
+// home
 router.get('/home', auth, ctrlHome.homeRead);
 
 // authentication
 router.post('/register', ctrlAuth.register);
 router.post('/login', ctrlAuth.login);
-/*router.post('/upload', (req, res) => {
-  console.log(`Successfully uploaded ${req.files.file.name}`);
-  res.sendStatus(200);
-});*/
-router.post('/upload', controller.upload);
-/*router.post('/upload', async (req, res) => {
-  try {
-      if(!req.files) {
-          res.send({
-              status: false,
-              message: 'No file uploaded'
-          });
-      } else {
-          //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-          let file= req.files;
-          console.log(file.file);
-          //Use the mv() method to place the file in upload directory (i.e. "uploads")
-          //file.file.mv('../uploads/');
-          file.file.mv('../uploads/', function(err) {
-            if (err) {
-              return res.status(500).send(err);
-            }
-            
-            res.send('File uploaded to 1');
-          });
-          //send response
-          res.send({
-              status: true,
-              message: 'File is uploaded',
-              data: {
-                  name: file.file.name,
-                  mimetype: file.file.mimetype,
-                  size: file.file.size
-              }
-          });
-      }
-  } catch (err) {
-      res.status(500).send(err);
+
+// upload
+router.post('/upload', ctrlFile.upload);
+
+var storage = multer.diskStorage({   
+  destination: function(req, file, cb) { 
+     cb(null, 'uploads/');    
+  }, 
+  filename: function (req, file, cb) { 
+     cb(null , file.originalname);   
   }
-});*/
- 
+});
+
+
+//  admin only
+router.get('/getUploads', ctrlAdmin.adminRead); 
 
 module.exports = router;

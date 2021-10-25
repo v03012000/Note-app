@@ -1,0 +1,10 @@
+a{
+    text-decoration: none;font-size: 95%;white-space: normal;
+}
+mat-expansion-panel{
+    margin-top:10px;
+    background-color: #f0e6fd;
+}
+button{
+    margin:10px 10px;
+}

@@ -16,10 +16,13 @@ import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuardService } from './services/auth-guard.service';
+import {  AuthGuardService } from './services/auth-guard.service';
 import { AuthenticationService } from './services/authentication.service';
 import { UploadsComponent } from './uploads/uploads.component';
-
+import { AdminGuardService } from './services/admin-guard.service';
+import { AdminComponent } from './admin/admin.component';
+import { AdminService } from './services/admin.service';
+import {MatExpansionModule} from '@angular/material/expansion'
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
@@ -27,7 +30,8 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuardService]  },
   //{ path: '**', redirectTo: '' },
-  { path: 'uploads', component: UploadsComponent, canActivate: [AuthGuardService]  },
+  { path: 'upload', component: UploadsComponent, canActivate: [AuthGuardService]  },
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuardService]  },
   
 ];
 @NgModule({
@@ -37,6 +41,7 @@ const appRoutes: Routes = [
     RegisterComponent,
     HomeComponent,
     UploadsComponent,
+    AdminComponent,
    
   ],
   imports: [
@@ -52,12 +57,13 @@ const appRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatExpansionModule,
     CommonModule,
     RouterModule.forRoot(
       appRoutes, 
     )
   ],
-  providers: [AuthGuardService, AuthenticationService],
+  providers: [AuthGuardService, AuthenticationService, AdminGuardService,AdminService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,12 +3,15 @@ import { Component, OnInit } from '@angular/core';
 
 //import { UploadService } from '../services/upload.service';
 import { FormGroup, FormControl,FormGroupDirective, Validators} from '@angular/forms';
+import { AuthenticationService } from '../services/authentication.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-uploads',
   templateUrl: './uploads.component.html',
   styleUrls: ['./uploads.component.css']
 })
 export class UploadsComponent implements OnInit {
+  
   majors: String[] = [
     'Computer Engineering',
     'Electrical Engineering',
@@ -23,25 +26,27 @@ export class UploadsComponent implements OnInit {
   electricalSubjects:String[]=['Power electronics','Microcontrollers','Power Systems','Analog Electronics'];
   subjects:String[]=[];
   selectedMajor:String='';
-  Year: number;
   selectedYear!:number;
   selectedSubject:String='';
+  cyear:number;
   fileName = '';  
   file: File|null = null;
   formData = new FormData();
-  myForm = new FormGroup({
-  fileSource: new FormControl('', [Validators.required]),
-  Major:new FormControl('',[Validators.required]),
-  Year:new FormControl('',[Validators.required]),
-  Subject:new FormControl({value:''},Validators.required)
-});
-  ngOnInit(): void {
+  myForm!:FormGroup;
+  pdfPreview!:string|undefined;
 
+  ngOnInit(): void {
+    this.myForm = new FormGroup({
+    samplefile:new FormControl(null, [Validators.required]),
+    Major:new FormControl(null,[Validators.required]),
+    Year:new FormControl(null,[Validators.required]),
+    Subject:new FormControl(null,[Validators.required])
+  });
   }
 
-    constructor(private http: HttpClient) {
-      this.Year = new Date().getFullYear()+4;
-      for (let year = this.Year; year >= 2015; year--) {
+    constructor(private http: HttpClient,public auth:AuthenticationService,private router:Router) {
+      this.cyear = new Date().getFullYear()+4;
+      for (let year = this.cyear; year >= 2015; year--) {
        this.years.push(year);
       }
   }
@@ -65,41 +70,113 @@ export class UploadsComponent implements OnInit {
     }
     onFileInput(event:any): void {
       if (event.target.files.length > 0) {
-        const samplefile = event.target.files[0] as File;
+        const file = event.target.files[0] as File;
         this.file=event.target.files[0] as File;
         this.myForm.patchValue({
-          fileSource: samplefile
-        });
+          samplefile: file,
+         });
+         console.log(this.myForm.value,"heree");
+         this.myForm.get('image')?.updateValueAndValidity();
+          const reader = new FileReader();
+          reader.onload = () => {
+          this.pdfPreview = reader.result?.toString();
+          };
+          reader.readAsDataURL(file);
+        //console.log(this.myForm.get("samplefile"),"heree");
       }
       
     }
     
   
     onSubmit(formDirective: FormGroupDirective,variable: any) {
-      console.warn(this.myForm.value);
+      const post = {
+        samplefile: this.myForm.value.samplefile,
+        Major: this.myForm.value.Major,
+        Year: this.myForm.value.Year,
+        Subject:this.myForm.value.Subject
+        };
+     
       if(this.file===null){
       alert("Add the Notes file");
       }
       else if(this.file.type==="application/pdf"){
-        console.log(this.myForm.get('Major'));
-        this.formData.append('samplefile', this.myForm.get('fileSource')?.value); 
-        this.formData.append('major',this.myForm.get('Major')?.value);
-        this.formData.append('year',this.myForm.get('Year')?.value);
-        this.formData.append('subject',this.myForm.get('Subject')?.value); 
-        this.http.post('http://localhost:4000/api/upload', this.formData)
-        .subscribe(res => {
-          console.log(res);
+        let uploadfile:File=this.file;
+        console.log(uploadfile);
+        this.formData.append('samplefile',post.samplefile); 
+        this.formData.append('major',post.Major);
+        this.formData.append('year',post.Year);
+        this.formData.append('subject',post.Subject); 
+        this.http.post('http://localhost:4000/api/upload', this.formData).subscribe((err)=>{
+          console.log(err);
         });
+        
         variable.value=null;
         this.myForm.reset();
-        formDirective.resetForm(); 
-         
+        formDirective.resetForm();
+          
       }
       else{
         alert("Upload a pdf file");
       }
-      
+      const currentUrl = this.router.url;
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    }); 
   }
   
 
+
+/*
+form!: FormGroup;
+imagePreview!: string| undefined;
+posts: Post[] =[];
+constructor(private http: HttpClient,public auth:AuthenticationService) { }
+
+ngOnInit(): void {
+this.form = new FormGroup({
+title: new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
+description: new FormControl(null, {validators: [Validators.required]}),
+image: new FormControl(null, {validators: [Validators.required]})
+});
+}
+
+onSavePost() {
+if (!this.form.valid) {
+return;
+}
+const post = {
+id: null,
+title: this.form.value.title,
+description: this.form.value.description,
+image: this.form.value.image
+};
+console.log(post);
+const temp=post;
+console.log(temp.image);
+const postData = new FormData();
+postData.append('title', post.title);
+postData.append('description', post.description);
+postData.append('image', post.image);
+
+this.http.post<{ message: string, post: Post }>('http://localhost:4000/api/upload', postData).subscribe((res) => {
+  console.log(res);
+}, error => {
+console.log(error);
+});
+//this.postService.addPost(post);
+this.form.reset();
+}
+
+onSelect(event: any) {
+const file = (event.target.files[0]);
+this.form.patchValue({image: file});
+console.log(this.form.value);
+this.form.get('image')?.updateValueAndValidity();
+console.log(this.form.get('image')?.value);
+const reader = new FileReader();
+reader.onload = () => {
+this.imagePreview = reader.result?.toString();
+};
+reader.readAsDataURL(file);
+}*/
 }

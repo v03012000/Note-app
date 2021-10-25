@@ -13,6 +13,11 @@ var userSchema = new mongoose.Schema({
       type: String,
       required: 'username can\'t be empty'
     },
+    role: {
+      type: String,
+      default: 'user',
+      enum: ["user", "admin"]
+     },
     password: {
       type: String,
       required: 'Password can\'t be empty',

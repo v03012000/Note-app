@@ -44,6 +44,7 @@ export class LoginComponent{
     this.auth.login(this.credentials).subscribe(() => {
       this.router.navigate(['/home']);
     }, (err) => {
+      alert(err.error.message);
       console.error(err);
     }); 
   }

@@ -2,8 +2,15 @@
     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
       <mat-icon>menu</mat-icon>
     </button>
-    <span></span>
-    <span class="example-spacer"></span>
+    <span ></span>
+    <span class="example-spacer" style="margin-left:20%">Note It Down</span>
+    <div >
+      <a mat-button routerLink="/home" >Home</a>
+    </div>
+    <div>
+      <a mat-button routerLink="" (click)="auth.logout()">Logout</a>
+    </div>
+   
   </mat-toolbar>
 
   <div class="container-fluid">
@@ -48,14 +55,39 @@
     id="file" 
     type="file" 
     name="samplefile"
-    class="form-control"
     #variable
-    (change)="onFileInput($event)" accept=".pdf"/>
+    (change)="onFileInput($event)"
+    accept=".pdf"/>
     <button style="margin-top:20px" type="submit" [disabled]="!myForm.valid" mat-raised-button color="primary">
   Submit
 </button> 
 </div>
-</form>   
+</form> 
+
   </div>
   </div>
+  <!--<form [formGroup]="form" (ngSubmit)="onSavePost()">
+    <mat-form-field appearance="fill">
+    <mat-label>Title</mat-label>
+    <input type="text" placeholder="Title" formControlName="title"   matInput>
+    
+    </mat-form-field>
+    <br>
+    <button type="button" mat-stroked-button
+    (click)="fileUplaoder.click()">Upload</button>
+    <br>
+    <input type="file" #fileUplaoder (change)="onSelect($event)">
+    <div class="preview-image" *ngIf="imagePreview !== '' && imagePreview && form.get('image')">
+    <img [src]="imagePreview" [alt]="form.value.title">
+    </div>
+    <br>
+    <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea placeholder="Description" formControlName="description"
+    rows="6" matInput>
+    </textarea>
+    </mat-form-field>
+    <br>
+    <button type="submit" mat-raised-button color="primary"> Create </button>
+    </form>-->
 

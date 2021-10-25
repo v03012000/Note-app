@@ -7,6 +7,7 @@ var User = mongoose.model('User');
     user.username = req.body.username;
     user.email = req.body.email;
     user.password = req.body.password;
+    user.role=req.body.role|| "user";
     user.save((err, doc) => {
         if (!err)
             res.send(doc);
@@ -31,6 +32,7 @@ var User = mongoose.model('User');
         token = user.generateJwt();
         res.status(200);
         res.json({
+          "role"  : user.role ,
           "token" : token
         });
       } else {
