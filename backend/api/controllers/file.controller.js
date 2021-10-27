@@ -20,8 +20,9 @@ const upload = async (req, res) => {
     const d=new Date().getTime();
     const blobName = `${req.body.year}_${req.body.major}_${req.body.subject}_${d}_${req.file.originalname}`;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    const uploadBlobResponse = await blockBlobClient.uploadFile(req.file.path);
-    blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":false})
+    const blobOptions = { blobHTTPHeaders: { blobContentType: 'application/pdf', blobContentDisposition:"attachment" }};
+    const uploadBlobResponse = await blockBlobClient.uploadFile(req.file.path,blobOptions);
+    blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":"false"})
     console.log(`FIle upload successfully on cloud ${uploadBlobResponse.requestId}`);
     if(!req.file) {
       return res.send('Please select an image to upload');

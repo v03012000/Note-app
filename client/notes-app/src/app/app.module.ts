@@ -23,6 +23,7 @@ import { AdminGuardService } from './services/admin-guard.service';
 import { AdminComponent } from './admin/admin.component';
 import { AdminService } from './services/admin.service';
 import {MatExpansionModule} from '@angular/material/expansion'
+import { AzureBlobStorageService } from './services/azure-storage-blob.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
@@ -63,7 +64,7 @@ const appRoutes: Routes = [
       appRoutes, 
     )
   ],
-  providers: [AuthGuardService, AuthenticationService, AdminGuardService,AdminService],
+  providers: [AuthGuardService, AuthenticationService, AdminGuardService,AdminService,AzureBlobStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
