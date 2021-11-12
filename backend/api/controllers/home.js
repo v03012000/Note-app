@@ -1,20 +1,20 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-
+const { SearchClient, SearchIndexClient, SearchIndexerClient, AzureKeyCredential} = require("@azure/search-documents");
 module.exports.homeRead = function(req, res) {
-
-  // If no user ID exists in the JWT return a 401
-  if (!req.payload._id) {
-    res.status(401).json({
-      "message" : "UnauthorizedError: Not acessible"
-    });
-  } else {
-    // Otherwise continue
-    User
-      .findById(req.payload._id)
-      .exec(function(err, user) {
-        res.status(200).json(user);
-      });
+ 
+const api_key="3649D78D199321C6AF1B94CE712F8767";
+const searchClient = new SearchClient(
+    "https://uploadsearchservice.search.windows.net",
+    "azureblob-index",
+    new AzureKeyCredential(api_key)
+  );
+  
+async function search() {
+    const result = await searchClient.getDocumentsCount();
+    console.log(result);
   }
+  
+  search();
 
 };

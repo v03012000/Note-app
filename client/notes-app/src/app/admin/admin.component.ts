@@ -17,7 +17,7 @@ export class AdminComponent implements OnInit {
  details:any;
  uploadsArray:any []=[];
  panelOpenState = false;
-  constructor(public auth:AuthenticationService, public adminService:AdminService, private cd: ChangeDetectorRef,private ngZone: NgZone, public azureService:AzureBlobStorageService, private router:Router,private http:HttpClient) { }
+ constructor(public auth:AuthenticationService, public adminService:AdminService,  public azureService:AzureBlobStorageService, private router:Router,private http:HttpClient) { }
   
 
   ngOnInit(): void {
@@ -44,8 +44,6 @@ export class AdminComponent implements OnInit {
       let url = window.URL.createObjectURL(blob);
       window.open(url);
     })
-   
-   
   }
 
   verifyFile(file:any){

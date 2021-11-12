@@ -30,9 +30,9 @@
         {{file.metadata.major}}
        </mat-panel-description>
     </mat-expansion-panel-header>
-    <button mat-raised-button (click)="deleteFile(file)">Delete notes</button>
-    <button mat-raised-button (click)="openFile(file)">Open notes</button>
-    <button mat-raised-button (click)="verifyFile(file)">Check verified</button>
+    <button mat-icon-button (click)="deleteFile(file)"><i class="material-icons">delete</i> </button>
+    <button mat-icon-button (click)="openFile(file)"><i class="material-icons">visibility</i></button>
+    <button mat-icon-button (click)="verifyFile(file)"><i class="material-icons">check</i></button>
     </mat-expansion-panel>
   </mat-accordion>   
         

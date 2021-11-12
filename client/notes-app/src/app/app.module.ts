@@ -16,6 +16,7 @@ import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {  AuthGuardService } from './services/auth-guard.service';
 import { AuthenticationService } from './services/authentication.service';
 import { UploadsComponent } from './uploads/uploads.component';
@@ -24,7 +25,9 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminService } from './services/admin.service';
 import {MatExpansionModule} from '@angular/material/expansion'
 import { AzureBlobStorageService } from './services/azure-storage-blob.service';
-
+import {MatGridListModule} from '@angular/material/grid-list';
+import { DisplayNotesComponent } from './display-notes/display-notes.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'login', component: LoginComponent },
@@ -33,7 +36,7 @@ const appRoutes: Routes = [
   //{ path: '**', redirectTo: '' },
   { path: 'upload', component: UploadsComponent, canActivate: [AuthGuardService]  },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuardService]  },
-  
+  { path: 'notes/:subject', component: DisplayNotesComponent,canActivate: [AuthGuardService]}
 ];
 @NgModule({
   declarations: [
@@ -43,6 +46,7 @@ const appRoutes: Routes = [
     HomeComponent,
     UploadsComponent,
     AdminComponent,
+    DisplayNotesComponent,
    
   ],
   imports: [
@@ -53,8 +57,11 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatCardModule,
     MatButtonModule,
+    FlexLayoutModule,
     MatIconModule,
+    NgbModule,
     MatToolbarModule,
+    MatGridListModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

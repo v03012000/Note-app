@@ -1,0 +1,45 @@
+a{
+    text-decoration: none;font-size: 95%;white-space: normal;
+}
+
+.content {
+    padding: 16px;
+}
+
+.content > mat-card {
+    width: 200px;
+}
+mat-card{
+    background-color: rgb(237, 229, 250);
+    border-radius:10px;
+}
+.home-header{
+    margin:30px 20px;
+}
+mat-form-field{
+    margin:20px 20px;
+}
+.light {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin:10px 10px;
+}
+.heading {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 24px;
+    font-weight: 600;
+}
+mat-card-title{
+    font-weight: bold;
+}
+mat-card-content{
+    font-size: medium;
+}
+button{
+    margin:5px 5px;
+}
+ngb-rating {
+    color: #FFC107;
+    font-size:20px;
+}

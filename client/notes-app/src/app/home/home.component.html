@@ -1,15 +1,155 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span ></span>
-    <span class="example-spacer" style="margin-left:20%">Note It Down</span>
-    <div >
-      <a mat-button routerLink="/home" >Home</a>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span ></span>
+  <span class="example-spacer" style="margin-left:20%">Note It Down</span>
+  <div>
+    <a mat-button routerLink="" >Logout</a>
+  </div> 
+</mat-toolbar>
+
+<div class="container-fluid">
+  <div class="home-header">
+  <div class="light">Find your notes here</div>
+  <div class="heading">
+  
+  
+  </div>
+  <div class="notes-blocks" *ngIf="!(clickedComputer || clickedElectrical || clickedElectronics || clickedInformation)">
+  <div>
+    <div class="box">
+      Select Major of Engineering
     </div>
+  </div>
+  <mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)" rowHeight="2:1" [gutterSize]="'10px'">
+    <mat-grid-tile (click)="clickedComputer=true">
+    <mat-grid-tile-header>Field- Engineering</mat-grid-tile-header>
+    <h3>Computer Engineering</h3>
+    </mat-grid-tile>
+    <mat-grid-tile (click)="clickedElectrical=true">
+    <mat-grid-tile-header>Field- Engineering</mat-grid-tile-header>
+    <h3>Electrical Engineering</h3>
+    </mat-grid-tile>
+    <mat-grid-tile (click)="clickedElectronics=true">
+    <mat-grid-tile-header>Field- Engineering</mat-grid-tile-header>
+    <h3>Electronics and Communication </h3>
+    </mat-grid-tile>
+    <mat-grid-tile (click)="clickedInformation=true">
+    <mat-grid-tile-header>Field- Engineering</mat-grid-tile-header>
+    <h3>Information Technology</h3>
+    </mat-grid-tile>
+  </mat-grid-list>
+  </div>
+  <div class="notes-blocks" *ngIf="clickedComputer">
     <div>
-      <a mat-button routerLink="" (click)="auth.logout()">Logout</a>
+    <div class="box">
+      Select Your Subject
     </div>
-   
-  </mat-toolbar>
-<p>home works!</p>
+    </div>
+    <mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)" rowHeight="2:1" [gutterSize]="'10px'">
+      <mat-grid-tile (click)="selectedSubject('Computer Engineering','Operating Systems')">
+      <mat-grid-tile-header>Computer Engineering</mat-grid-tile-header>
+      <h3>Operating Systems</h3>
+      </mat-grid-tile>
+      <mat-grid-tile (click)="selectedSubject('Computer Engineering','Design and Analysis of Algorithms')">
+      <mat-grid-tile-header>Computer Engineering</mat-grid-tile-header>
+      <h3>Design and Analysis of Algorithms</h3>
+      </mat-grid-tile>
+      <mat-grid-tile (click)="selectedSubject('Computer Engineering','Machine learning')">
+      <mat-grid-tile-header>Computer Engineering</mat-grid-tile-header>
+      <h3>Machine learning </h3>
+      </mat-grid-tile>
+      <mat-grid-tile (click)="selectedSubject('Computer Engineering','Artificial Intelligence')">
+      <mat-grid-tile-header>Computer Engineering</mat-grid-tile-header>
+      <h3>Artificial Intelligence</h3>
+      </mat-grid-tile>
+      <mat-grid-tile (click)="selectedSubject('Computer Engineering','Object Oriented Programming')">
+        <mat-grid-tile-header>Computer Engineering</mat-grid-tile-header>
+        <h3>Object Oriented Programming</h3>
+        </mat-grid-tile>
+    </mat-grid-list> 
+  </div>
+  <div  class="notes-blocks" *ngIf="clickedInformation">
+    <div>
+    <div class="box">
+      Select Your Subject
+    </div>
+    </div>
+    <mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)" rowHeight="2:1" [gutterSize]="'10px'">
+      <mat-grid-tile>
+      <mat-grid-tile-header>Information Technology</mat-grid-tile-header>
+      <h3>Operating Systems</h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Information Technology</mat-grid-tile-header>
+      <h3>Design and Analysis of Algorithms</h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Information Technology</mat-grid-tile-header>
+      <h3>Machine learning </h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Information Technology</mat-grid-tile-header>
+      <h3>Artificial Intelligence</h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-grid-tile-header>Information Technology</mat-grid-tile-header>
+        <h3>Object Oriented Programming</h3>
+        </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+  <div  class="notes-blocks" *ngIf="clickedElectrical">
+    <div>
+    <div class="box">
+      Select Your Subject
+    </div>
+    </div>
+    <mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)" rowHeight="2:1" [gutterSize]="'10px'">
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electrical Engineering</mat-grid-tile-header>
+      <h3>Power electronics</h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electrical Engineering</mat-grid-tile-header>
+      <h3>Microcontrollers</h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electrical Engineering</mat-grid-tile-header>
+      <h3>Power Systems </h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electrical Engineering</mat-grid-tile-header>
+      <h3>Analog Electronics</h3>
+      </mat-grid-tile>
+    </mat-grid-list> 
+  </div>
+  <div class="notes-blocks" *ngIf="clickedElectronics">
+    <div>
+    <div class="box">
+      Select Your Subject
+    </div>
+    </div>
+    <mat-grid-list [cols]="breakpoint" (window:resize)="onResize($event)" rowHeight="2:1" [gutterSize]="'10px'">
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electronics and communication</mat-grid-tile-header>
+      <h3> Signals and Systems</h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electronics and communication</mat-grid-tile-header>
+      <h3>Analog circuits</h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electronics and communication</mat-grid-tile-header>
+      <h3>Digital Electronics </h3>
+      </mat-grid-tile>
+      <mat-grid-tile>
+      <mat-grid-tile-header>Electronics and communication</mat-grid-tile-header>
+      <h3>Electromagnet Theory</h3>
+      </mat-grid-tile>
+    </mat-grid-list> 
+  </div>
+  
+
+  </div>
+

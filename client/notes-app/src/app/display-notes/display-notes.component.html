@@ -1,0 +1,46 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span ></span>
+    <span class="example-spacer" style="margin-left:20%">Note It Down</span>
+    <div>
+      <a mat-button routerLink="" >Logout</a>
+    </div> 
+  </mat-toolbar>
+  <div class="container-fluid">
+    <div class="home-header">
+    <div class="light">Choose from the most popular notes</div>
+    <div class="heading">
+    </div>
+    </div>
+
+  <div class="content">
+    <div fxLayout="row wrap" fxLayoutGap="18px grid">
+      <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="40%" *ngFor="let notes of resultsArray">
+        <mat-card class="mat-elevation-z4" >
+          <mat-card-header>
+            <mat-card-title>Notes on {{notes.subject}} </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+                Filename : {{notes.filename}}
+            </p>
+            <p>
+             Batch : {{notes.year}}
+            </p>
+            <p>
+                Ratings : 
+                <ngb-rating [max]="5" [(rate)]="notes.ratings" [readonly]="false"></ngb-rating>
+            </p>
+
+          </mat-card-content>
+          <mat-card-actions>
+            <button  mat-icon-button ><i class="material-icons">favorite_border</i></button>
+            <button  mat-icon-button (click)="openFile(notes)"><i class="material-icons">visibility</i></button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+    </div>
+    </div>

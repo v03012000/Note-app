@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+var Documents = mongoose.model('notes');
 const { BlobServiceClient,StorageSharedKeyCredential  } = require("@azure/storage-blob");
 const util = require("util");
 const multer = require("multer");
@@ -13,7 +15,7 @@ const upload = async (req, res) => {
     //console.log(req);
     const path = req.file.path;
     const account = "noteitdown";
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-04-26T17:43:25Z&st=2021-10-24T09:43:25Z&sip=49.36.186.16&spr=https,http&sig=mU9ISzzyE2Spt%2Fq%2FTJITbKbNirzXzvOJ22kqSeX3uls%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-10-31T13:58:33Z&st=2021-11-12T05:58:33Z&sip=49.36.184.42&spr=https,http&sig=jqOCB1rep9waZAefU1DGPd6Omy6rmJGfutxknrCtguU%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
@@ -22,7 +24,15 @@ const upload = async (req, res) => {
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const blobOptions = { blobHTTPHeaders: { blobContentType: 'application/pdf', blobContentDisposition:"attachment" }};
     const uploadBlobResponse = await blockBlobClient.uploadFile(req.file.path,blobOptions);
-    blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":"false"})
+    blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":"false"});
+    var document = new Documents();
+    document.document_url=blockBlobClient.url;
+    document.filename=req.file.originalname;
+    document.blobname=blobName;
+    document.verified=false;
+    document.save(function (err) {
+      if (err) return handleError(err);
+    });
     console.log(`FIle upload successfully on cloud ${uploadBlobResponse.requestId}`);
     if(!req.file) {
       return res.send('Please select an image to upload');

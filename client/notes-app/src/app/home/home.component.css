@@ -1,3 +1,61 @@
 a{
     text-decoration: none;font-size: 95%;white-space: normal;
 }
+.notes-blocks{
+    margin:30px 20px;
+}
+.home-header{
+    margin:30px 20px;
+}
+mat-form-field{
+    margin:20px 20px;
+}
+.light {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin:10px 10px;
+}
+.heading {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 24px;
+    font-weight: 600;
+}
+.content {
+    padding:10px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.selections{
+    margin:10px 10px;
+}
+.box{
+    color: rgb(0, 0, 0);
+    display: flex;
+    font-size: 20px;
+    align-items: center;
+    border-left: 4px
+ solid rgb(16, 43, 69);
+    font-weight: 600;
+    border-top-color: rgb(16, 43, 69);
+    border-right-color: rgb(16, 43, 69);
+    border-bottom-color: rgb(16, 43, 69);
+    padding-left: 12px;
+    margin-bottom: 24px;
+    padding-right: 12px;
+    justify-content: space-between;
+}
+.gridcontainer {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+}
+
+
+  mat-grid-tile {
+    background: rgb(235, 236, 236);
+    border-radius:10px;
+  }
+  

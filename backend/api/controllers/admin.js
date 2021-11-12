@@ -1,6 +1,7 @@
 const { DefaultAzureCredential } = require("@azure/identity");
 const { BlobServiceClient,StorageSharedKeyCredential, BlobClient,BlobSASPermissions } = require("@azure/storage-blob");
 
+
 module.exports.adminRead =function(req, res) {
     options={includeMetadata:true};
     AccountSASPermissions={
@@ -33,7 +34,7 @@ module.exports.adminRead =function(req, res) {
     //console.log(blobServiceClient.url);
     //const sasToken=blobServiceClient.generateAccountSasUrl(sharedAccessPolicy);
     //console.log(sasToken);
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-04-26T17:43:25Z&st=2021-10-24T09:43:25Z&sip=49.36.186.16&spr=https,http&sig=mU9ISzzyE2Spt%2Fq%2FTJITbKbNirzXzvOJ22kqSeX3uls%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-10-31T13:58:33Z&st=2021-11-12T05:58:33Z&sip=49.36.184.42&spr=https,http&sig=jqOCB1rep9waZAefU1DGPd6Omy6rmJGfutxknrCtguU%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
@@ -55,7 +56,7 @@ module.exports.adminRead =function(req, res) {
          expiresOn:expiryDate,
          startDate:startDate,
         }
-        console.log(`Blob ${i++}: ${blob.name}`);
+        //console.log(`Blob ${i++}: ${blob.name}`);
         let blobclient=containerClient.getBlobClient(blob.name);
         if(blob.metadata.verified==="false"){
         let blobobj={
