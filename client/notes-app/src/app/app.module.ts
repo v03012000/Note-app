@@ -26,8 +26,10 @@ import { AdminService } from './services/admin.service';
 import {MatExpansionModule} from '@angular/material/expansion'
 import { AzureBlobStorageService } from './services/azure-storage-blob.service';
 import {MatGridListModule} from '@angular/material/grid-list';
-import { DisplayNotesComponent } from './display-notes/display-notes.component';
+import { DialogOverviewDialog, DisplayNotesComponent } from './display-notes/display-notes.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatDialogModule} from '@angular/material/dialog';
+
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'login', component: LoginComponent },
@@ -47,7 +49,7 @@ const appRoutes: Routes = [
     UploadsComponent,
     AdminComponent,
     DisplayNotesComponent,
-   
+    DialogOverviewDialog
   ],
   imports: [
     BrowserModule,
@@ -59,6 +61,7 @@ const appRoutes: Routes = [
     MatButtonModule,
     FlexLayoutModule,
     MatIconModule,
+    MatDialogModule,
     NgbModule,
     MatToolbarModule,
     MatGridListModule,

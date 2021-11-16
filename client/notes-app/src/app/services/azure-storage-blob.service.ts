@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { ErrorHandler, Injectable } from '@angular/core';
-import { BlobClient, BlobServiceClient, ContainerClient } from '@azure/storage-blob';
+import { BlobClient, BlobServiceClient, ContainerClient, Pipeline } from '@azure/storage-blob';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +21,29 @@ export class AzureBlobStorageService {
             handler();
           })
       }
-    public deleteNotes(sas: string, name: string, url:string, handler: () => void) {
-        this.deleteBlob(name, this.containerClient(sas), url, handler)
+    public deleteNotes(sas: string, name: string, url:string, id:any, handler: () => void) {
+      //console.log(id);
+      this.http.post(`http://localhost:4000/api/${id}/delete`, {responseType: 'json'}).subscribe();
+      this.deleteBlob(name, this.containerClient(sas), url, handler);
+       
       }
 
     private blobClient(containerClient:ContainerClient,name:string):BlobClient{
         return containerClient.getBlobClient(name);
     }
 
-    public async verifyNotes(sas:string,name:string,metadata:any){
+    public async verifyNotes(sas:string,name:string,metadata:any,id:any){
        let blob=this.blobClient(this.containerClient(sas),name);
        metadata["verified"]="true";
        console.log(metadata);
        await blob.setMetadata(metadata);
+       this.http.post(`http://localhost:4000/api/${id}/verify`, {documentid:id},{responseType: 'json'}).subscribe({
+        next: data => {
+      },
+      error: error => {
+          console.error('There was an error!', error);
+      }}
+       );
     }
     public async downloadPDF(url:string,sas:string,name:string,handler: (blob: Blob) => void){
       this.downloadBlob(name, this.containerClient(sas), handler);
@@ -45,5 +55,9 @@ export class AzureBlobStorageService {
         handler(blob)
       })
     })
+  }
+
+  public getBlob(url:string){
+     
   }
 }

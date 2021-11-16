@@ -15,7 +15,7 @@ const upload = async (req, res) => {
     //console.log(req);
     const path = req.file.path;
     const account = "noteitdown";
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-10-31T13:58:33Z&st=2021-11-12T05:58:33Z&sip=49.36.184.42&spr=https,http&sig=jqOCB1rep9waZAefU1DGPd6Omy6rmJGfutxknrCtguU%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-06-26T22:34:06Z&st=2021-11-12T14:34:06Z&sip=49.36.186.4&spr=https,http&sig=CDgOpMdi%2Bb7Jw7kC2XuJLnEkojfUKlRZh6q2OfuSZ9g%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
@@ -24,7 +24,6 @@ const upload = async (req, res) => {
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const blobOptions = { blobHTTPHeaders: { blobContentType: 'application/pdf', blobContentDisposition:"attachment" }};
     const uploadBlobResponse = await blockBlobClient.uploadFile(req.file.path,blobOptions);
-    blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":"false"});
     var document = new Documents();
     document.document_url=blockBlobClient.url;
     document.filename=req.file.originalname;
@@ -32,6 +31,9 @@ const upload = async (req, res) => {
     document.verified=false;
     document.save(function (err) {
       if (err) return handleError(err);
+      else{
+        blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":"false","mongo_db_id":document._id});
+      }
     });
     console.log(`FIle upload successfully on cloud ${uploadBlobResponse.requestId}`);
     if(!req.file) {

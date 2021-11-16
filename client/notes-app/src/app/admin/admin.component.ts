@@ -30,7 +30,7 @@ export class AdminComponent implements OnInit {
   }
 
   deleteFile(file:any){
-  this.azureService.deleteNotes(file.sasToken,file.name, file.url, () => {
+  this.azureService.deleteNotes(file.sasToken,file.name, file.url, file.id, () => {
     const currentUrl = this.router.url;
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
@@ -47,7 +47,7 @@ export class AdminComponent implements OnInit {
   }
 
   verifyFile(file:any){
-    this.azureService.verifyNotes(file.sasToken,file.name,file.metadata);
+    this.azureService.verifyNotes(file.sasToken,file.name,file.metadata,file.id);
     const currentUrl = this.router.url;
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);

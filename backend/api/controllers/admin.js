@@ -34,7 +34,7 @@ module.exports.adminRead =function(req, res) {
     //console.log(blobServiceClient.url);
     //const sasToken=blobServiceClient.generateAccountSasUrl(sharedAccessPolicy);
     //console.log(sasToken);
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-10-31T13:58:33Z&st=2021-11-12T05:58:33Z&sip=49.36.184.42&spr=https,http&sig=jqOCB1rep9waZAefU1DGPd6Omy6rmJGfutxknrCtguU%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-06-26T22:34:06Z&st=2021-11-12T14:34:06Z&sip=49.36.186.4&spr=https,http&sig=CDgOpMdi%2Bb7Jw7kC2XuJLnEkojfUKlRZh6q2OfuSZ9g%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
@@ -64,6 +64,7 @@ module.exports.adminRead =function(req, res) {
             "metadata":blob.metadata,
             "sasToken":sas, 
             "url":blobclient.url,
+            "id":blob.metadata.mongo_db_id,
         }
         blobarray.push(blobobj);
     }
