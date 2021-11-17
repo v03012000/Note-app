@@ -14,7 +14,7 @@ module.exports.NotesRead =function(req, res) {
       );
     const results=[];
     const account = "noteitdown";
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-06-26T22:34:06Z&st=2021-11-12T14:34:06Z&sip=49.36.186.4&spr=https,http&sig=CDgOpMdi%2Bb7Jw7kC2XuJLnEkojfUKlRZh6q2OfuSZ9g%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-06-29T20:19:08Z&st=2021-11-17T12:19:08Z&sip=49.36.184.118&spr=https,http&sig=O1px4UJZZtSOGBxyeweAJE1l%2Fr5QyEQ43DkjUXVImBY%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
@@ -30,6 +30,8 @@ module.exports.NotesRead =function(req, res) {
             let blobclient=containerClient.getBlobClient(blob.name);
             try{
             const props= await blobclient.getProperties();
+            await Documents.findById(props.metadata.mongo_db_id,function(err,result){
+            if(result){
             let blobobj={
                 "name":blob.name,
                 "sasToken":sas, 
@@ -39,11 +41,11 @@ module.exports.NotesRead =function(req, res) {
                 "major":props.metadata.major,
                 "subject":props.metadata.subject,
                 "verified":props.metadata.verified,
-                "ratings":1,
-                "id":props.metadata.mongo_db_id,
-
-            }
+                "ratings":result.rating,
+                "id":props.metadata.mongo_db_id}
             results.push(blobobj);
+          }
+        }) 
             }
             catch(err){
                console.log(err);
@@ -86,13 +88,21 @@ async function create(){
     res.status(201).json({ message: 'Review added' });
      }
     }
-  });
-        
-        
-        
-
+  });       
 }
 create();
+}
+
+module.exports.GetReviews=function(req,res){
+  async function getreviews(){
+    const document = Documents.findById(req.params.id,function(err,result){ 
+    if(result){
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({"reviews":result.reviews})); 
+    }
+    });
+  }
+  getreviews();
 
 }
 

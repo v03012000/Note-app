@@ -36,10 +36,11 @@ var storage = multer.diskStorage({
 });
 
 
-//  admin only
+
 router.get('/getUploads', ctrlAdmin.adminRead); 
 router.get('/getNotes/:subject',ctrlNotes.NotesRead);
 router.post('/:id/addreview',ctrlNotes.CreateReview);
+router.get('/:id/getreviews',ctrlNotes.GetReviews);
 router.post('/:id/verify',ctrlNotes.VerifyNotes);
 router.post('/:id/delete',ctrlNotes.DeleteNotes);
 module.exports = router;

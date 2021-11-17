@@ -31,6 +31,13 @@ export class DisplayNotesService {
     catchError(this.handleError)
   );
    }
+
+   getReviews(notes:any): Observable<any> {
+    return this.http.get(`http://localhost:4000/api/${notes.id}/getreviews`, {responseType: 'json'}).pipe(map((data:any) => {
+      this.array.push(data);
+      return data;
+  }),catchError(this.handleError));
+   }
    private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.

@@ -16,6 +16,7 @@ export interface DialogData {
 })
 export class DisplayNotesComponent implements OnInit {
   resultsArray:any []=[];
+  reviewsAray:any []=[];
   subject!:string|null;
   comment!: string;
   rating!: string;
@@ -40,7 +41,7 @@ export class DisplayNotesComponent implements OnInit {
     })
   }
 
-  openDialog(notes:any): void {
+  openAddReviewDialog(notes:any): void {
     const dialogRef = this.dialog.open(DialogOverviewDialog, {
       width: '300px',
       data: { comment: "", rating:0},
@@ -57,6 +58,19 @@ export class DisplayNotesComponent implements OnInit {
     });
   }
 
+  openSeeReviewsDialog(notes:any){
+    this.displayNotesService.getReviews(notes).subscribe((res)=>{
+      this.reviewsAray=res.reviews;
+    });
+    const dialogRef = this.dialog.open(DialogSeeReview, {
+      width: '400px',
+      data: { "reviews":this.reviewsAray},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      
+    });
+
+  }
 
 }
 
@@ -97,5 +111,41 @@ export class DialogOverviewDialog {
 
   submit(): void {
     this.dialogRef.close({"rating":this.selectedChoice,"comment":this.comment});
+  }
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  template: `<h1 mat-dialog-title *ngIf="data.reviews.length>0"> All the reviews</h1>
+  <h1 mat-dialog-title *ngIf="data.reviews.length===0">Currently there are no reviews of these notes. You can add your reviews also.</h1>
+  <div mat-dialog-content>
+  <mat-card style="margin:20px 20px;" *ngFor="let review of data.reviews">
+  <mat-card-header>
+  <mat-card-title>Review by {{review.name}} </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+            <p>
+                Ratings: <ngb-rating style="color: #FFC107;font-size:20px;" [max]="5" [(rate)]="review.rating" [readonly]="true"></ngb-rating>
+            </p>
+            <p>
+             Comment : {{review.comment}}
+            </p>
+          </mat-card-content>
+  </mat-card>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="dialogRef.close()">Close</button>
+  </div>`,
+})
+
+
+export class DialogSeeReview{
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogSeeReview>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+
+  ) {
+    console.log(data);
   }
 }
