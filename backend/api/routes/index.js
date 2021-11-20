@@ -43,4 +43,5 @@ router.post('/:id/addreview',ctrlNotes.CreateReview);
 router.get('/:id/getreviews',ctrlNotes.GetReviews);
 router.post('/:id/verify',ctrlNotes.VerifyNotes);
 router.post('/:id/delete',ctrlNotes.DeleteNotes);
+router.get('/search/:id',ctrlNotes.Search);
 module.exports = router;

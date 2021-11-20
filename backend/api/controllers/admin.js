@@ -31,10 +31,8 @@ module.exports.adminRead =function(req, res) {
     const sharedAccessPolicy = {
             permissions: AccountSASPermissions,  
     };
-    //console.log(blobServiceClient.url);
-    //const sasToken=blobServiceClient.generateAccountSasUrl(sharedAccessPolicy);
-    //console.log(sasToken);
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2023-06-26T22:34:06Z&st=2021-11-12T14:34:06Z&sip=49.36.186.4&spr=https,http&sig=CDgOpMdi%2Bb7Jw7kC2XuJLnEkojfUKlRZh6q2OfuSZ9g%3D";
+
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-03-04T05:44:46Z&st=2021-11-19T21:44:46Z&sip=49.36.186.248&spr=https,http&sig=LQNXcjaGCtdPhBv5Bio04VO2j5lmac6%2F5N9kxp%2FlTi8%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);

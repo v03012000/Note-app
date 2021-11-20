@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl,FormGroupDirective, Validators} from '@angular/forms';
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 @Component({
   selector: 'app-uploads',
   templateUrl: './uploads.component.html',
@@ -34,8 +35,11 @@ export class UploadsComponent implements OnInit {
   formData = new FormData();
   myForm!:FormGroup;
   pdfPreview!:string|undefined;
-
+  admin:boolean=false;
   ngOnInit(): void {
+    if(localStorage.getItem("role")==="admin"){
+      this.admin=true;
+     }
     this.myForm = new FormGroup({
     samplefile:new FormControl(null, [Validators.required]),
     Major:new FormControl(null,[Validators.required]),
@@ -44,11 +48,18 @@ export class UploadsComponent implements OnInit {
   });
   }
 
-    constructor(private http: HttpClient,public auth:AuthenticationService,private router:Router) {
+    constructor(private http: HttpClient,public auth:AuthenticationService,private router:Router,private _snackBar: MatSnackBar) {
       this.cyear = new Date().getFullYear()+4;
       for (let year = this.cyear; year >= 2015; year--) {
        this.years.push(year);
       }
+  }
+
+  goToAdmin(){
+    this.router.navigate(['/admin']);
+  }
+  goToHome(){
+    this.router.navigate(['/home']);
   }
     
     majorChanged(event:any){
@@ -121,6 +132,7 @@ export class UploadsComponent implements OnInit {
       const currentUrl = this.router.url;
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
+        this._snackBar.open("File Uploaded sucessfully", "Ok");
     }); 
   }
   

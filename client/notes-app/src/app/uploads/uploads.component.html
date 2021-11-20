@@ -1,17 +1,32 @@
-<mat-toolbar color="primary">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      <mat-icon>menu</mat-icon>
+<mat-toolbar>
+  <div fxHide.gt-xs>
+    <button mat-icon-button [matMenuTriggerFor]="dropMenu" fxHide fxShow.xs>
+      <mat-icon>more_vert</mat-icon>
     </button>
-    <span ></span>
-    <span class="example-spacer" style="margin-left:20%">Note It Down</span>
-    <div >
-      <a mat-button routerLink="/home" >Home</a>
-    </div>
-    <div>
-      <a mat-button routerLink="" (click)="auth.logout()">Logout</a>
-    </div>
-   
-  </mat-toolbar>
+  </div>
+  <span ></span>
+  <span id="spacer">Note It Down</span>
+  <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
+      <ul fxLayout fxLayoutGap="15px" class="navigation-items">
+          <li>
+            <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+          </li>
+          <li  *ngIf="admin" >
+            <a mat-button routerLink="" (click)="goToAdmin()">Admin</a>
+          </li>
+          <li>
+            <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
+          </li>
+      </ul>
+  </div>
+  <mat-menu  #dropMenu="matMenu">
+    <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+    <a *ngIf="admin" mat-button routerLink="" (click)="goToAdmin()">Admin</a>
+    <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
+</mat-menu>
+</mat-toolbar>
+
+
 
   <div class="container-fluid">
   <div>

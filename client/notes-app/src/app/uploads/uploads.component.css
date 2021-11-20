@@ -4,3 +4,6 @@ mat-form-field{
 a{
     text-decoration: none;font-size: 95%;white-space: normal;
 }
+mat-toolbar{
+    background-color: #00B4CC;
+}

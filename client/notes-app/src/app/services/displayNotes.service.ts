@@ -38,6 +38,27 @@ export class DisplayNotesService {
       return data;
   }),catchError(this.handleError));
    }
+
+   getSuggestions(value:any): Observable<any>{
+     const data={
+      "suggest": { "notes-suggest": { "text": value, "completion": { "field": "filename" } } }
+     }
+    return this.http.post(`http://localhost:9200/notess/_search?pretty&pretty`,data).pipe(map((data:any) => {
+      return data;
+   }))
+   }
+
+   search(id:string|null): Observable<any>{
+     console.log(id);
+    const base=this.http.get(`http://localhost:4000/api/search/${id}`, {responseType: 'json'});
+   const request = base.pipe(
+    map((data:any) => {
+       this.array.push(data);
+       return data;
+   }));
+   return request;
+   }
+
    private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -55,3 +76,4 @@ export class DisplayNotesService {
   }
 
 }
+

@@ -7,6 +7,23 @@ a{
 .home-header{
     margin:30px 20px;
 }
+#spacer{
+margin:10px 10px;
+}
+mat-toolbar{
+    background-color: #00B4CC;
+}
+mat-toolbar div{
+  margin-left:20px;
+}
+mat-label {
+  color: #00B4CC;
+}
+::ng-deep .mat-focused .mat-form-field-underline .mat-form-field-ripple{
+  background-color: #00B4CC !important;
+
+}
+
 mat-form-field{
     margin:20px 20px;
 }
@@ -54,8 +71,61 @@ mat-form-field{
 }
 
 
-  mat-grid-tile {
-    background: rgb(235, 236, 236);
+mat-grid-tile {
+    background: #e7fcfc;
     border-radius:10px;
+  }
+ 
+
+  .search {
+    width: 100%;
+    display: flex;
+  }
+  
+  .searchTerm {
+    width: 100%;
+    border: 3px solid #00B4CC;
+    border-right: none;
+    padding: 2px;
+    height: 36px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9DBFAF;
+  }
+  
+  .searchTerm:focus{
+    color: #00B4CC;
+  }
+  
+  .searchButton {
+    width: 45px;
+    height: 45px;
+    border: none;
+    background-color:white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  /*Resize the wrap to see the search bar change!*/
+  .wrap{
+    width: 30%;
+    margin:5% 30%;
+  }
+  @media only screen and (max-width: 900px) {
+    .wrap{
+        width: 90%;
+        margin:20px 5px;
+      }
+      #spacer{
+        margin:0px 0px;
+      }
+      mat-toolbar div{
+        margin:0px 0px;
+      }
+  }
+
+  i{
+   color:#00B4CC; 
   }
   

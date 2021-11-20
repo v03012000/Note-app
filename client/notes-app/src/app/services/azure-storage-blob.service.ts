@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { ErrorHandler, Injectable } from '@angular/core';
 import { BlobClient, BlobServiceClient, ContainerClient, Pipeline } from '@azure/storage-blob';
 

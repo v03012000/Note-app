@@ -29,7 +29,10 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { DialogOverviewDialog, DialogSeeReview, DisplayNotesComponent } from './display-notes/display-notes.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatDialogModule} from '@angular/material/dialog';
-
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatListModule } from '@angular/material/list';
+import {MatMenuModule} from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'login', component: LoginComponent },
@@ -38,7 +41,8 @@ const appRoutes: Routes = [
   //{ path: '**', redirectTo: '' },
   { path: 'upload', component: UploadsComponent, canActivate: [AuthGuardService]  },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuardService]  },
-  { path: 'notes/:subject', component: DisplayNotesComponent,canActivate: [AuthGuardService]}
+  { path: 'notes/:subject', component: DisplayNotesComponent,canActivate: [AuthGuardService]},
+  { path: 'search/:id', component: DisplayNotesComponent,canActivate: [AuthGuardService]}
 ];
 @NgModule({
   declarations: [
@@ -50,13 +54,17 @@ const appRoutes: Routes = [
     AdminComponent,
     DisplayNotesComponent,
     DialogOverviewDialog,
-    DialogSeeReview
+    DialogSeeReview,
+
   ],
   imports: [
     BrowserModule,
+    MatListModule,
     BrowserAnimationsModule,
+    MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
     MatSelectModule,
     MatCardModule,
     MatButtonModule,
@@ -75,7 +83,7 @@ const appRoutes: Routes = [
       appRoutes, 
     )
   ],
-  providers: [AuthGuardService, AuthenticationService, AdminGuardService,AdminService,AzureBlobStorageService],
+  providers: [AuthGuardService, AuthenticationService, AdminGuardService,AdminService,AzureBlobStorageService,MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

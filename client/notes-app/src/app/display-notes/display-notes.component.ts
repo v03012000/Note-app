@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router'
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthenticationService } from '../services/authentication.service';
 import { AzureBlobStorageService } from '../services/azure-storage-blob.service';
 import { DisplayNotesService } from '../services/displayNotes.service';
-
+import {MatSnackBar} from '@angular/material/snack-bar';
 export interface DialogData {
   comment: string;
   rating: number;
@@ -15,27 +16,90 @@ export interface DialogData {
   styleUrls: ['./display-notes.component.css']
 })
 export class DisplayNotesComponent implements OnInit {
+  admin:boolean=false;
   resultsArray:any []=[];
   reviewsAray:any []=[];
   subject!:string|null;
+  document_id!:string|null;
   comment!: string;
   rating!: string;
-  constructor(private route: ActivatedRoute, private displayNotesService:DisplayNotesService, private azureService:AzureBlobStorageService,public dialog: MatDialog,private auth:AuthenticationService) { }
+  link!:SafeResourceUrl;
+  constructor(private route: ActivatedRoute, private displayNotesService:DisplayNotesService, private azureService:AzureBlobStorageService,public dialog: MatDialog,public auth:AuthenticationService,private router:Router,private sanitizer: DomSanitizer,private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem("role")==="admin"){
+     this.admin=true;
+    }
     this.subject = this.route.snapshot.paramMap.get('subject');
-    console.log(this.subject);
+    this.document_id=this.route.snapshot.paramMap.get('id');
+    console.log(this.document_id);
+    if(this.subject){
     this.displayNotesService.getNotes(this.subject).subscribe((res) => {
       console.log(res.blobs);
       this.resultsArray=res.blobs;
     }, (err) => {
       console.error(err);}
     );
+    }
+    else if(this.document_id){
+      console.log(this.document_id);
+      this.displayNotesService.search(this.document_id).subscribe((res)=>{
+        console.log(res);
+        this.resultsArray=res.documents;
+      }, (err) => {
+      console.error(err);}
+    )
+    }
   }
 
+  onShare(file:any){
+    this.azureService.downloadPDF(file.url,file.sasToken, file.name, blob => {
+      let url = window.URL.createObjectURL(blob);
+      this.link = this.sanitizer.bypassSecurityTrustResourceUrl(url); 
+      
+      console.log(this.link);
+    })
+
+  }
+  goToHome(){
+    this.router.navigate(['/home']);
+  }
+  goToAdmin(){
+    this.router.navigate(['/admin']);
+  }
+  goToUploads(){
+    this.router.navigate(['/upload']);
+  }
+  
+  sortByNewest(){
+    this.resultsArray=this.resultsArray.sort((a, b) => {
+      let temp1=new Date(a.uploaded_date).valueOf();
+      let temp2=new Date(b.uploaded_date).valueOf();
+      return temp2-temp1;
+    });
+    
+  }
+
+  sortByOldest(){
+    this.resultsArray=this.resultsArray.sort((a, b) => {
+      let temp1=new Date(a.uploaded_date).valueOf();
+      let temp2=new Date(b.uploaded_date).valueOf();
+      return temp1 - temp2;
+    });
+    
+  }
+
+  sortByRating(){
+    this.resultsArray=this.resultsArray.sort((a, b) => {
+      let temp1=a.ratings;
+      let temp2=b.ratings;
+      return temp2 - temp1;
+    });
+  }
 
   openFile(file:any){
     this.azureService.downloadPDF(file.url,file.sasToken, file.name, blob => {
+      console.log(file.url);
       let url = window.URL.createObjectURL(blob);
       window.open(url);
     })
@@ -55,21 +119,24 @@ export class DisplayNotesComponent implements OnInit {
       console.log(result);
       const user=this.auth.getUserDetails();
       this.displayNotesService.addReview(info,notes,user?._id,user?.username).subscribe();
+      setTimeout(()=>{ 
+        const currentUrl = this.router.url;                          //<<<---using ()=> syntax
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate([currentUrl]);
+          this._snackBar.open("Your Review is Added", "Ok");
+          }); 
+   }, 1000);
     });
   }
 
   openSeeReviewsDialog(notes:any){
-    this.displayNotesService.getReviews(notes).subscribe((res)=>{
-      this.reviewsAray=res.reviews;
-    });
+    this.reviewsAray=notes.reviews;
     const dialogRef = this.dialog.open(DialogSeeReview, {
       width: '400px',
       data: { "reviews":this.reviewsAray},
     });
-    dialogRef.afterClosed().subscribe(result => {
-      
+    dialogRef.afterClosed().subscribe(result => {  
     });
-
   }
 
 }

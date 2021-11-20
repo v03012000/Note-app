@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { AdminService } from '../services/admin.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { AzureBlobStorageService } from '../services/azure-storage-blob.service';
-
+import {MatSnackBar} from '@angular/material/snack-bar';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -17,9 +17,8 @@ export class AdminComponent implements OnInit {
  details:any;
  uploadsArray:any []=[];
  panelOpenState = false;
- constructor(public auth:AuthenticationService, public adminService:AdminService,  public azureService:AzureBlobStorageService, private router:Router,private http:HttpClient) { }
+ constructor(public auth:AuthenticationService, public adminService:AdminService,  public azureService:AzureBlobStorageService, private router:Router,private http:HttpClient,private _snackBar: MatSnackBar) { }
   
-
   ngOnInit(): void {
     this.adminService.getUploads().subscribe((res) => {
       console.log(res.blobs);
@@ -29,11 +28,18 @@ export class AdminComponent implements OnInit {
     );
   }
 
+  goToHome(){
+    this.router.navigate(['/home']);
+  }
+  goToUploads(){
+    this.router.navigate(['/upload']);
+  }
   deleteFile(file:any){
   this.azureService.deleteNotes(file.sasToken,file.name, file.url, file.id, () => {
     const currentUrl = this.router.url;
         this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
+        this._snackBar.open("Notes deleted", "Ok");
         });
     //this.reloadFiles();
   });
@@ -48,10 +54,13 @@ export class AdminComponent implements OnInit {
 
   verifyFile(file:any){
     this.azureService.verifyNotes(file.sasToken,file.name,file.metadata,file.id);
-    const currentUrl = this.router.url;
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+    setTimeout(()=>{ 
+      const currentUrl = this.router.url;                          //<<<---using ()=> syntax
+      this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
         this.router.navigate([currentUrl]);
-        });
+        this._snackBar.open("Notes verified", "Ok");
+        }); 
+ }, 1000);
   }
 
   reloadFiles(){

@@ -1,25 +1,40 @@
-<mat-toolbar color="primary">
-    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      <mat-icon>menu</mat-icon>
+<mat-toolbar>
+  <div fxHide.gt-xs>
+    <button mat-icon-button [matMenuTriggerFor]="dropMenu" fxHide fxShow.xs>
+      <mat-icon>more_vert</mat-icon>
     </button>
-    <span ></span>
-    <span class="example-spacer" style="margin-left:20%">Note It Down</span>
-    <div>
-      <a mat-button routerLink="" (click)="auth.logout()">Logout</a>
-    </div> 
-  </mat-toolbar>
+  </div>
+  <span ></span>
+  <span id="spacer">Note It Down</span>
+  <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
+      <ul fxLayout fxLayoutGap="15px" class="navigation-items">
+          <li>
+            <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+          </li>
+          <li>
+            <a mat-button routerLink=""  (click)="goToUploads()">Upload Notes</a>
+          </li>
+          <li>
+            <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
+          </li>
+      </ul>
+  </div>
+  <mat-menu  #dropMenu="matMenu">
+    <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+    <a mat-button routerLink=""  (click)="goToUploads()">Upload Notes</a>
+    <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
+</mat-menu>
+</mat-toolbar>
 
   <div class="container-fluid">
-    <div>
+    <div *ngIf="uploadsArray.length>0;else showthis">
         <h1 style="text-align:center;margin-top: 50px">Newly uploaded notes</h1>
     </div>
+    <ng-template #showthis><h1 style="font-size:30px; text-align:center; margin-top:50px">There are currently no newly uploaded notes</h1></ng-template>
     <div class="newly-uploads" style="margin-left:10%; width:80%; margin-top:5%">
     <mat-accordion *ngFor="let file of uploadsArray">
     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
     <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{file.metadata.filename}}
-      </mat-panel-title>
       <mat-panel-description>
        {{file.metadata.year}}
       </mat-panel-description>
@@ -30,6 +45,7 @@
         {{file.metadata.major}}
        </mat-panel-description>
     </mat-expansion-panel-header>
+    <p> {{file.metadata.filename}}</p>
     <button mat-icon-button (click)="deleteFile(file)"><i class="material-icons">delete</i> </button>
     <button mat-icon-button (click)="openFile(file)"><i class="material-icons">visibility</i></button>
     <button mat-icon-button (click)="verifyFile(file)"><i class="material-icons">check</i></button>

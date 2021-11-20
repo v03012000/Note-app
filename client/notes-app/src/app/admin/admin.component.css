@@ -8,3 +8,6 @@ mat-expansion-panel{
 button{
     margin:10px 10px;
 }
+mat-toolbar{
+    background-color: #00B4CC;
+}
