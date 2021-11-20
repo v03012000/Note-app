@@ -4,7 +4,7 @@ var atob = require('atob');
 var mongoose = require('mongoose');
 var Documents = mongoose.model('notes');
 var Reviews = mongoose.model('reviews');
-var elastic = require('../middleware/elasticSearch');
+
 
 
 
