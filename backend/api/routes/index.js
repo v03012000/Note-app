@@ -15,7 +15,7 @@ var ctrlAuth = require('../controllers/authentication');
 let ctrlFile = require("../controllers/file.controller");
 let ctrlAdmin= require("../controllers/admin");
 let ctrlNotes= require("../controllers/notes");
-
+let ctrlUser = require("../controllers/user");
 // home
 router.get('/home', auth, ctrlHome.homeRead);
 
@@ -40,6 +40,10 @@ var storage = multer.diskStorage({
 router.get('/getUploads', ctrlAdmin.adminRead); 
 router.get('/getNotes/:subject',ctrlNotes.NotesRead);
 router.post('/:id/addreview',ctrlNotes.CreateReview);
+router.post('/:id/addfavourite',ctrlUser.AddToFavourite);
+router.post('/:id/removefavourite',ctrlUser.RemoveFromFavourite);
+router.get('/:id/getfavourites',ctrlUser.GetAllFavourites);
+router.get('/getfavourites/:id',ctrlUser.Favourites);
 router.get('/:id/getreviews',ctrlNotes.GetReviews);
 router.post('/:id/verify',ctrlNotes.VerifyNotes);
 router.post('/:id/delete',ctrlNotes.DeleteNotes);

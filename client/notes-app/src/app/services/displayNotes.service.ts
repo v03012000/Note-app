@@ -32,6 +32,26 @@ export class DisplayNotesService {
   );
    }
 
+   addToFavourites(notes:any,user:String|undefined):Observable<any>{
+    return this.http.post(`http://localhost:4000/api/${notes.id}/addfavourite`,{document:notes.id,user:user}).pipe(
+      retry(1),  
+      catchError(this.handleError)
+    );
+   }
+
+   removeFromFavourites(notes:any,user:String|undefined):Observable<any>{
+    return this.http.post(`http://localhost:4000/api/${notes.id}/removefavourite`,{document:notes.id,user:user}).pipe(
+      retry(1),  
+      catchError(this.handleError)
+    );
+   }
+
+   getFavourites(user:String|undefined):Observable<any>{
+    return this.http.get(`http://localhost:4000/api/${user}/getfavourites`, {responseType: 'json'}).pipe(map((data:any) => {
+      return data;
+  }),catchError(this.handleError));
+   }
+
    getReviews(notes:any): Observable<any> {
     return this.http.get(`http://localhost:4000/api/${notes.id}/getreviews`, {responseType: 'json'}).pipe(map((data:any) => {
       this.array.push(data);

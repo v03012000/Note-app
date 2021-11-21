@@ -9,6 +9,9 @@
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
       <ul fxLayout fxLayoutGap="15px" class="navigation-items">
           <li>
+            <a mat-button routerLink=""  (click)="goToFavourites()">Favourites</a>
+          </li>
+          <li>
             <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
           </li>
           <li  *ngIf="admin" >
@@ -21,6 +24,7 @@
   </div>
   <mat-menu  #dropMenu="matMenu">
     <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+    <a mat-button routerLink=""  (click)="goToFavourites()">Favourites</a>
     <a *ngIf="admin" mat-button routerLink="" (click)="goToAdmin()">Admin</a>
     <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
 </mat-menu>

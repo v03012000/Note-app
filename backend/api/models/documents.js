@@ -77,20 +77,17 @@ var notesSchema = new mongoose.Schema({
 }
 );
  // notesSchema.index({ major: 1, subject: 1 });
-  var esClient = new elasticsearch.Client({host: 'localhost:9200'});
+
   notesSchema.plugin(mongoosastic, {
     filter: function(doc) {
         return doc.verified === false;
       }
-          //index:'notes',
-   // type: '_doc',
-   // esClient: esClient
+          
     });
 
   var Notes= mongoose.model('notes', notesSchema);
 
   Notes.createMapping(function(err, mapping){
-    // do neat things here
     if (err) {
       console.log('error creating mapping (you can safely ignore this)');
       console.log(err);

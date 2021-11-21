@@ -61,6 +61,10 @@ export class UploadsComponent implements OnInit {
   goToHome(){
     this.router.navigate(['/home']);
   }
+  goToFavourites(){
+    this.router.navigate(['/favourites']);
+  }
+  
     
     majorChanged(event:any){
       console.log(event);

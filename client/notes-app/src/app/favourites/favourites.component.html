@@ -1,0 +1,79 @@
+<mat-toolbar>
+    <div fxHide.gt-xs>
+      <button mat-icon-button [matMenuTriggerFor]="dropMenu" fxHide fxShow.xs>
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+    <span ></span>
+    <span id="spacer">Note It Down</span>
+    <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
+        <ul fxLayout fxLayoutGap="15px" class="navigation-items">
+            <li>
+              <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+            </li>
+            <li  *ngIf="admin" >
+              <a mat-button routerLink="" (click)="goToAdmin()">Admin</a>
+            </li>
+            <li>
+              <a mat-button routerLink=""  (click)="goToUploads()">Upload Notes</a>
+            </li>
+            <li>
+              <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
+            </li>
+        </ul>
+    </div>
+    <mat-menu  #dropMenu="matMenu">
+      <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+      <a *ngIf="admin" mat-button routerLink="" (click)="goToAdmin()">Admin</a>
+      <a mat-button routerLink=""  (click)="goToUploads()">Upload Notes</a>
+      <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
+  </mat-menu>
+  </mat-toolbar>
+
+  <div class="container-fluid">
+    <div class="home-header">
+    <div class="light">Hi, {{auth.getUserDetails()?.username}}</div>
+    <div class="light" style="margin:20px 10px"> Your favourite notes</div>
+    </div>
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Sort notes by:</mat-label>
+        <mat-select>
+          <mat-option disabled>Sort by</mat-option>
+          <mat-option  value="Newest" (click)="sortByNewest()">
+            Newest
+          </mat-option>
+          <mat-option value="Oldest" (click)="sortByOldest()">
+            Oldest
+          </mat-option>
+          <mat-option value="Popular" (click)="sortByRating()">
+            Popular  
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="newly-uploads" style="margin-left:10%; width:80%; margin-top:10px">
+        <mat-accordion *ngFor="let file of favouritesArray">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
+        <mat-expansion-panel-header>
+          <mat-panel-description>
+           {{file.year}}
+          </mat-panel-description>
+          <mat-panel-description>
+            {{file.subject}}
+           </mat-panel-description>
+           <mat-panel-description>
+           </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p> {{file.filename}}</p>
+        <p> {{file.major}}</p>
+        <p>Ratings:
+            <ngb-rating *ngIf="file.ratings>0; else showthis" [max]="5" [(rate)]="file.ratings" [readonly]="true"></ngb-rating>
+            <ng-template #showthis>No ratings are given</ng-template>
+        </p>
+        <button mat-raised-button (click)="seeNotes(file)">Go To Notes </button>
+        <button mat-raised-button (click)="removeFavourite(file)">Remove from Favourites</button>
+        </mat-expansion-panel>
+      </mat-accordion>       
+        </div>
+    </div>

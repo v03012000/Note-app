@@ -8,6 +8,9 @@
     <span id="spacer">Note It Down</span>
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
         <ul fxLayout fxLayoutGap="15px" class="navigation-items">
+            <li>
+              <a mat-button routerLink=""  (click)="goToFavourites()">Favourites</a>
+            </li>
             <li  *ngIf="admin" >
               <a mat-button routerLink="" (click)="goToAdmin()">Admin</a>
             </li>
@@ -17,9 +20,11 @@
             <li>
               <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
             </li>
+            
         </ul>
     </div>
     <mat-menu  #dropMenu="matMenu">
+      <a mat-button routerLink=""  (click)="goToFavourites()">Favourites</a>
       <a *ngIf="admin" mat-button routerLink="" (click)="goToAdmin()">Admin</a>
       <a mat-button routerLink=""  (click)="goToUploads()">Upload Notes</a>
       <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>

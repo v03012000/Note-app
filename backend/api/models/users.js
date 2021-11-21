@@ -23,7 +23,11 @@ var userSchema = new mongoose.Schema({
       required: 'Password can\'t be empty',
       minlength : [8,'Password must be atleast 8 character long']
   },
-  saltSecret: String
+  saltSecret: String,
+  favourites: {
+    type: Map,
+    of: Boolean,
+ }
 
   });
 

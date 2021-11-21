@@ -33,6 +33,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatListModule } from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FavouritesComponent } from './favourites/favourites.component';
+import { FavouritesService } from './services/favourites.service';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'login', component: LoginComponent },
@@ -41,6 +43,7 @@ const appRoutes: Routes = [
   //{ path: '**', redirectTo: '' },
   { path: 'upload', component: UploadsComponent, canActivate: [AuthGuardService]  },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuardService]  },
+  { path: 'favourites', component: FavouritesComponent, canActivate: [AuthGuardService]  },
   { path: 'notes/:subject', component: DisplayNotesComponent,canActivate: [AuthGuardService]},
   { path: 'search/:id', component: DisplayNotesComponent,canActivate: [AuthGuardService]}
 ];
@@ -55,7 +58,7 @@ const appRoutes: Routes = [
     DisplayNotesComponent,
     DialogOverviewDialog,
     DialogSeeReview,
-
+    FavouritesComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,7 +86,7 @@ const appRoutes: Routes = [
       appRoutes, 
     )
   ],
-  providers: [AuthGuardService, AuthenticationService, AdminGuardService,AdminService,AzureBlobStorageService,MatSnackBar],
+  providers: [AuthGuardService, AuthenticationService, AdminGuardService,AdminService,AzureBlobStorageService,MatSnackBar,FavouritesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

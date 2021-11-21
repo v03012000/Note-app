@@ -6,8 +6,6 @@ var Documents = mongoose.model('notes');
 var Reviews = mongoose.model('reviews');
 
 
-
-
 module.exports.NotesRead =function(req, res) {
     //console.log(req.params.subject);
     const api_key="3649D78D199321C6AF1B94CE712F8767";
@@ -209,6 +207,9 @@ module.exports.DeleteNotes=function(req,res){
     }
     });
     }
+
+
+    
 
 
 

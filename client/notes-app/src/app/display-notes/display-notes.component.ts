@@ -17,6 +17,7 @@ export interface DialogData {
 })
 export class DisplayNotesComponent implements OnInit {
   admin:boolean=false;
+  user!:String;
   resultsArray:any []=[];
   reviewsAray:any []=[];
   subject!:string|null;
@@ -24,15 +25,16 @@ export class DisplayNotesComponent implements OnInit {
   comment!: string;
   rating!: string;
   link!:SafeResourceUrl;
+  userFavourites:Map<String,Boolean>=new Map();
   constructor(private route: ActivatedRoute, private displayNotesService:DisplayNotesService, private azureService:AzureBlobStorageService,public dialog: MatDialog,public auth:AuthenticationService,private router:Router,private sanitizer: DomSanitizer,private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.user=this.auth.getUserDetails()?._id as String;
     if(localStorage.getItem("role")==="admin"){
      this.admin=true;
     }
     this.subject = this.route.snapshot.paramMap.get('subject');
     this.document_id=this.route.snapshot.paramMap.get('id');
-    console.log(this.document_id);
     if(this.subject){
     this.displayNotesService.getNotes(this.subject).subscribe((res) => {
       console.log(res.blobs);
@@ -50,6 +52,18 @@ export class DisplayNotesComponent implements OnInit {
       console.error(err);}
     )
     }
+    this.displayNotesService.getFavourites(this.auth.getUserDetails()?._id).subscribe((res)=>{
+      this.userFavourites= new Map();
+      Object.entries(res.favourites).forEach((entry)=>{
+        this,this.userFavourites.set(entry[0],entry[1] as Boolean);
+        
+      })
+      
+      console.log(this.userFavourites);
+
+    }, (err) => {
+    console.error(err);}
+  )
   }
 
   onShare(file:any){
@@ -70,14 +84,16 @@ export class DisplayNotesComponent implements OnInit {
   goToUploads(){
     this.router.navigate(['/upload']);
   }
+  goToFavourites(){
+    this.router.navigate(['/favourites']);
+  }
   
   sortByNewest(){
     this.resultsArray=this.resultsArray.sort((a, b) => {
       let temp1=new Date(a.uploaded_date).valueOf();
       let temp2=new Date(b.uploaded_date).valueOf();
       return temp2-temp1;
-    });
-    
+    }); 
   }
 
   sortByOldest(){
@@ -85,8 +101,7 @@ export class DisplayNotesComponent implements OnInit {
       let temp1=new Date(a.uploaded_date).valueOf();
       let temp2=new Date(b.uploaded_date).valueOf();
       return temp1 - temp2;
-    });
-    
+    }); 
   }
 
   sortByRating(){
@@ -96,6 +111,22 @@ export class DisplayNotesComponent implements OnInit {
       return temp2 - temp1;
     });
   }
+
+  addToFavourites(notes:any){
+    let user=this.auth.getUserDetails();
+    this.displayNotesService.addToFavourites(notes,user?._id).subscribe();
+    this.userFavourites.set(notes.id,true);
+    this._snackBar.open("Added to favourites", "Ok");
+  }
+
+  removeFromFavourites(notes:any){
+    let user=this.auth.getUserDetails();
+    this.displayNotesService.removeFromFavourites(notes,user?._id).subscribe();
+    this.userFavourites.set(notes.id,false);
+    this._snackBar.open("Removed from favourites", "Ok");
+  }
+
+
 
   openFile(file:any){
     this.azureService.downloadPDF(file.url,file.sasToken, file.name, blob => {

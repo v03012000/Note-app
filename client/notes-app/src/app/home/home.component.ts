@@ -31,6 +31,9 @@ export class HomeComponent implements OnInit {
   constructor(public auth:AuthenticationService, private router:Router, private displayNotesService:DisplayNotesService,private http:HttpClient) { }
 
   ngOnInit() {
+    if(localStorage.getItem("role")==="admin"){
+      this.admin=true;
+     }
     this.breakpoint = (window.innerWidth <= 400) ? 1 : (window.innerWidth <= 700)?2:(window.innerWidth <= 1100)?3:4;
     this.createFormControls();
     this.createForm();
@@ -47,6 +50,9 @@ export class HomeComponent implements OnInit {
   } 
   goToUploads(){
     this.router.navigate(['/upload']);
+  }
+  goToFavourites(){
+    this.router.navigate(['/favourites']);
   }
   createFormControls() {
     this.searchtext = new FormControl('', Validators.required); 
