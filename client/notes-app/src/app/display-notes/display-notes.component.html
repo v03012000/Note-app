@@ -9,19 +9,19 @@
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
       <ul fxLayout fxLayoutGap="15px" class="navigation-items">
           <li>
-            <a mat-button routerLink=""  (click)="goToFavourites()">Favourites</a>
+            <a mat-button routerLink="" class="links" (click)="goToFavourites()">Favourites</a>
           </li>
           <li>
-            <a mat-button routerLink=""  (click)="goToHome()" >Home</a>
+            <a mat-button routerLink="" class="links" (click)="goToHome()" >Home</a>
           </li>
           <li  *ngIf="admin" >
-            <a mat-button routerLink="" (click)="goToAdmin()">Admin</a>
+            <a mat-button routerLink="" class="links" (click)="goToAdmin()">Admin</a>
           </li>
           <li>
-            <a mat-button routerLink=""  (click)="goToUploads()">Upload Notes</a>
+            <a mat-button routerLink="" class="links" (click)="goToUploads()">Upload Notes</a>
           </li>
           <li>
-            <a mat-button routerLink=""  (click)="auth.logout()">Logout</a>
+            <a mat-button routerLink="" class="links" (click)="auth.logout()">Logout</a>
           </li>
       </ul>
   </div>
@@ -38,12 +38,11 @@
 
   <div class="container-fluid">
     <div class="home-header">
-    <div class="light">Choose from the most popular notes</div>
-    <div class="heading">
+    <div class="light">Choose from the most popular notes
     </div>
     </div>
-
-    <div *ngIf="subject">
+    <div fxLayout="row wrap" fxLayoutGap="9px grid">
+    <div *ngIf="subject" style="float:left" fxFlex="20%"  fxFlex.xs="20%" fxFlex.sm="20%" >
       <mat-form-field appearance="fill">
         <mat-label>Sort notes by:</mat-label>
         <mat-select>
@@ -61,42 +60,54 @@
       </mat-form-field>
     </div>
 
-  <div class="content" *ngIf="resultsArray.length>0; else showthis">
-    <div fxLayout="row wrap" fxLayoutGap="18px grid">
-      <div fxFlex="70%" style="margin:10px 20px;" fxFlex.xs="100%" fxFlex.sm="100%" *ngFor="let notes of resultsArray">
+    
+
+  <div class="content" *ngIf="resultsArray.length>0; else showthis" style="margin:5px 20px;" fxFlex="90%"  fxFlex.xs="90%" fxFlex.sm="90%">
+    <div fxLayout="row wrap" fxLayoutGap="9px grid">
+      <div fxFlex="100%" style="margin:5px 20px;" fxFlex.xs="100%" fxFlex.sm="100%" *ngFor="let notes of resultsArray">
         <mat-card class="mat-elevation-z4" >
           <mat-card-header>
-            <mat-card-title>Notes on {{notes.subject}} </mat-card-title>
+            <mat-card-title>Notes on {{notes.subject}} of {{notes.year}} Batch</mat-card-title>
           </mat-card-header>
           <mat-card-content>
+            <div fxLayout="row wrap" fxLayoutGap="9px grid">
+              <div fxFlex="70%" style="margin:5px 20px;" fxFlex.xs="100%" fxFlex.sm="100%">
             <p>
-                Filename : {{notes.filename}}
+                <strong>Filename : </strong>{{notes.filename}}
             </p>
             <p>
-             Batch : {{notes.year}}
-            </p>
-            <p>
-                Ratings : 
+                <strong>Ratings : </strong>
                 
                 <ngb-rating *ngIf="notes.ratings>0; else showthis" [max]="5" [(rate)]="notes.ratings" [readonly]="true"></ngb-rating>
                 <ng-template #showthis>No ratings are given</ng-template>
             </p>
             <p>
-              Uploaded on : {{notes.uploaded_date | date:'short'}}
+              <strong>Number of reviews : </strong>{{notes.numReviews}} 
             </p>
-
+            <p>
+              <strong>Uploaded on : </strong>{{notes.uploaded_date | date:'short'}}
+            </p>
+            </div>
+            <div  fxHide.lt-lg >
+            <embed [src]="notes.url | sanitizeUrl"  height="150px" width="150px" />
+            
+            </div>
+            </div>
+            
           </mat-card-content>
           <mat-card-actions>
-            <button  mat-raised-button style="margin:3px 3px" (click)="openAddReviewDialog(notes)"> Add a review </button>
-            <button  mat-raised-button style="margin:3px 3px" (click)="openFile(notes)">Open notes</button>
-            <button  mat-raised-button style="margin:3px 3px" (click)="openSeeReviewsDialog(notes)">See all the reviews</button>
-            <button mat-icon-button  [ngStyle]="{'color': (userFavourites.get(notes.id)===true)?'red':'#C0BCBC','float':'right'}" (click)="(userFavourites.get(notes.id))?removeFromFavourites(notes):addToFavourites(notes)" aria-label="Example icon-button with a heart icon" >
-              <mat-icon >favorite</mat-icon>
+            <button  mat-raised-button style="margin:1px 3px" (click)="openAddReviewDialog(notes)"> Add a review </button>
+            <button  mat-raised-button style="margin:1px 3px" (click)="openFile(notes)">Open notes</button>
+            <button  mat-raised-button style="margin:1px 3px" (click)="openSeeReviewsDialog(notes)">See all the reviews</button>
+            <button mat-icon-button style="color:#00B4CC;" (click)="onShare(notes)"><i class="material-icons">share</i></button>
+            <button mat-icon-button  [ngStyle]="{'color': (userFavourites.get(notes.id)===true)?'red':'#C0BCBC'}" (click)="(userFavourites.get(notes.id))?removeFromFavourites(notes):addToFavourites(notes)" aria-label="Example icon-button with a heart icon" >
+              <i class="material-icons">favorite</i>
             </button>
           </mat-card-actions>
         </mat-card>
       </div>
     </div>
     </div>
-    <ng-template  #showthis><h1 style="font-size:30px;">Currently no notes are available. Please upload some.</h1></ng-template>
     </div>
+    <ng-template  #showthis><h1 style="font-size:30px;">Currently no notes are available. Please upload some.</h1></ng-template>
+    </div> 

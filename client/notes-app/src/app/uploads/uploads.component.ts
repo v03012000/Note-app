@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 //import { UploadService } from '../services/upload.service';
@@ -6,6 +6,8 @@ import { FormGroup, FormControl,FormGroupDirective, Validators} from '@angular/f
 import { AuthenticationService } from '../services/authentication.service';
 import { Router } from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { throwError } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 @Component({
   selector: 'app-uploads',
   templateUrl: './uploads.component.html',
@@ -103,12 +105,13 @@ export class UploadsComponent implements OnInit {
     }
     
   
-    onSubmit(formDirective: FormGroupDirective,variable: any) {
+   onSubmit(formDirective: FormGroupDirective,variable: any) {
       const post = {
         samplefile: this.myForm.value.samplefile,
         Major: this.myForm.value.Major,
         Year: this.myForm.value.Year,
-        Subject:this.myForm.value.Subject
+        Subject:this.myForm.value.Subject,
+        Uploaded_by:this.auth.getUserDetails()?._id,
         };
      
       if(this.file===null){
@@ -121,23 +124,39 @@ export class UploadsComponent implements OnInit {
         this.formData.append('major',post.Major);
         this.formData.append('year',post.Year);
         this.formData.append('subject',post.Subject); 
-        this.http.post('http://localhost:4000/api/upload', this.formData).subscribe((err)=>{
-          console.log(err);
-        });
-        
+        this.formData.append('uploaded_by',post.Uploaded_by as string); 
+        this.http.post('http://localhost:4000/api/upload', this.formData).pipe(  
+          catchError(this.handleError)
+        ).subscribe();
+
         variable.value=null;
         this.myForm.reset();
         formDirective.resetForm();
-          
+        const currentUrl = this.router.url;
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+        this._snackBar.open("File Uploaded sucessfully", "Ok");
+    });  
       }
       else{
         alert("Upload a pdf file");
       }
-      const currentUrl = this.router.url;
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate([currentUrl]);
-        this._snackBar.open("File Uploaded sucessfully", "Ok");
-    }); 
+      
+  }
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      alert(error.error);
+      //console.error(
+      //  `Backend returned code ${error.status}, body was: `, error.error);
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(
+      'Something bad happened; please try again later.');
   }
   
 

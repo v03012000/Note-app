@@ -17,6 +17,7 @@ export interface DialogData {
 })
 export class DisplayNotesComponent implements OnInit {
   admin:boolean=false;
+  screensize=window.screen.width;
   user!:String;
   resultsArray:any []=[];
   reviewsAray:any []=[];
@@ -24,7 +25,7 @@ export class DisplayNotesComponent implements OnInit {
   document_id!:string|null;
   comment!: string;
   rating!: string;
-  link!:SafeResourceUrl;
+  link!:string;
   userFavourites:Map<String,Boolean>=new Map();
   constructor(private route: ActivatedRoute, private displayNotesService:DisplayNotesService, private azureService:AzureBlobStorageService,public dialog: MatDialog,public auth:AuthenticationService,private router:Router,private sanitizer: DomSanitizer,private _snackBar: MatSnackBar) { }
 
@@ -37,8 +38,7 @@ export class DisplayNotesComponent implements OnInit {
     this.document_id=this.route.snapshot.paramMap.get('id');
     if(this.subject){
     this.displayNotesService.getNotes(this.subject).subscribe((res) => {
-      console.log(res.blobs);
-      this.resultsArray=res.blobs;
+      this.resultsArray=res;
     }, (err) => {
       console.error(err);}
     );
@@ -54,6 +54,7 @@ export class DisplayNotesComponent implements OnInit {
     }
     this.displayNotesService.getFavourites(this.auth.getUserDetails()?._id).subscribe((res)=>{
       this.userFavourites= new Map();
+      if(res.favourites)
       Object.entries(res.favourites).forEach((entry)=>{
         this,this.userFavourites.set(entry[0],entry[1] as Boolean);
         
@@ -67,13 +68,10 @@ export class DisplayNotesComponent implements OnInit {
   }
 
   onShare(file:any){
-    this.azureService.downloadPDF(file.url,file.sasToken, file.name, blob => {
-      let url = window.URL.createObjectURL(blob);
-      this.link = this.sanitizer.bypassSecurityTrustResourceUrl(url); 
-      
+      this.link=`https://web.whatsapp.com/send?text=${file.url}`;
+      window.open(this.link as string, "_blank");
       console.log(this.link);
-    })
-
+  
   }
   goToHome(){
     this.router.navigate(['/home']);
@@ -130,8 +128,8 @@ export class DisplayNotesComponent implements OnInit {
 
   openFile(file:any){
     this.azureService.downloadPDF(file.url,file.sasToken, file.name, blob => {
-      console.log(file.url);
       let url = window.URL.createObjectURL(blob);
+      console.log(url);
       window.open(url);
     })
   }

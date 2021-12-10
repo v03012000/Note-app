@@ -1,4 +1,4 @@
-a{
+.links{
     text-decoration: none;font-size: 95%;white-space: normal;
 }
 
@@ -23,10 +23,11 @@ mat-card{
     border-radius:10px;
 }
 .home-header{
-    margin:30px 20px;
+    margin-left: 20px;
+    margin-top:20;
 }
 mat-form-field{
-    margin:20px 20px;
+    margin:0px 20px;
 }
 .light {
     color: rgba(0, 0, 0, 0.54);

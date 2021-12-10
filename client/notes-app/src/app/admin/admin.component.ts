@@ -62,6 +62,10 @@ export class AdminComponent implements OnInit {
         }); 
  }, 1000);
   }
+  mail(file:any){
+    this.adminService.sendMail(file.metadata.uploaded_by,file).subscribe();
+    this._snackBar.open("Mail sended sucessfully", "Ok");
+  }
 
   reloadFiles(){
 

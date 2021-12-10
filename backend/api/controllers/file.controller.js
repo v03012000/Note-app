@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Documents = mongoose.model('notes');
+var Users = mongoose.model('User');
 const { BlobServiceClient,StorageSharedKeyCredential  } = require("@azure/storage-blob");
 const util = require("util");
 const multer = require("multer");
@@ -11,19 +12,23 @@ const upload = async (req, res) => {
 
   try {
 
-    await uploadFile(req, res);
-    //console.log(req);
+    const log= await uploadFile(req, res);
+    console.log(log);
     const path = req.file.path;
     const account = "noteitdown";
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-03-04T05:44:46Z&st=2021-11-19T21:44:46Z&sip=49.36.186.248&spr=https,http&sig=LQNXcjaGCtdPhBv5Bio04VO2j5lmac6%2F5N9kxp%2FlTi8%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-01-29T14:24:25Z&st=2021-12-10T06:24:25Z&sip=0.0.0.0-255.255.255.255&spr=https,http&sig=tns4t766IuJynhbN9wzFP1Kq4hRqx8exMd4mFi751to%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
     const d=new Date().getTime();
-    const blobName = `${req.body.year}_${req.body.major}_${req.body.subject}_${d}_${req.file.originalname}`;
+    const blobName = `${req.body.year}_${req.body.major.replace(/\s/g, "")}_${req.body.subject.replace(/\s/g, "")}_${d}_${req.file.originalname.replace(/\s/g, "")}`;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const blobOptions = { blobHTTPHeaders: { blobContentType: 'application/pdf', blobContentDisposition:"attachment" }};
     const uploadBlobResponse = await blockBlobClient.uploadFile(req.file.path,blobOptions);
+    console.log(uploadBlobResponse);
+    const id= await Users.findById(req.body.uploaded_by).then((res)=>{
+      return res });
+    console.log(id._id);
     var document = new Documents();
     document.document_url=blockBlobClient.url;
     document.filename=req.file.originalname;
@@ -32,10 +37,15 @@ const upload = async (req, res) => {
     document.subject=req.body.subject;
     document.year=req.body.year;
     document.major=req.body.major;
+    document.uploaded_by=id._id;
     document.save(function (err) {
-      if (err) return handleError(err);
+      if (err) {
+        res.send('Error occured while uploading the file');
+        return handleError(err);
+      }
+
       else{
-        blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":"false","mongo_db_id":document._id});
+        blockBlobClient.setMetadata({"year":req.body.year,"major":req.body.major,"subject":req.body.subject,"filename":req.file.originalname,"verified":"false","mongo_db_id":document._id,"uploaded_by":id._id});
       }
     });
     console.log(`FIle upload successfully on cloud ${uploadBlobResponse.requestId}`);

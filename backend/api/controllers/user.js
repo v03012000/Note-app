@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 const { NotesRead } = require('./notes');
 var Users = mongoose.model('User');
 var Notes = mongoose.model('notes');
-
 module.exports.AddToFavourite=function(req,res){
     const user=req.body.user;
     const document=req.body.document.toString();
@@ -10,7 +9,15 @@ module.exports.AddToFavourite=function(req,res){
     Users.findById(user,function(err,result){
         console.log(result);
     if(!err){
-        result.favourites.set(document,true);
+
+        if(result.favourites){
+            result.favourites.set(document,true);
+        }
+        else{
+         result.favourites=new Map();
+         result.favourites.set(document,true);
+        }
+
         result.save();     
      res.setHeader('Content-Type', 'application/json');
      res.send(JSON.stringify({"added to favourites":true}));
@@ -46,7 +53,7 @@ module.exports.AddToFavourite=function(req,res){
         let favouritesArray=[];
         console.log(result);
     if(!err){
-        result.favourites.forEach((key,value)=>{
+        result.favourites?.forEach((key,value)=>{
             if(key===true){
                 console.log(value);
                 favouritesArray.push(value);
@@ -76,7 +83,7 @@ module.exports.AddToFavourite=function(req,res){
        });
         let prom=Notes.find({_id: {$in: favs}});
         let arr=await prom.then((results)=>{
-            const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2021-11-19T21:25:02Z&st=2021-11-19T13:25:02Z&sip=49.36.186.248&spr=https,http&sig=ytqJeSkVdQQaQm%2FXPi%2F%2F%2FHQzuR8pfjmdHJ4UGBUXc2Y%3D";
+            const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-01-29T14:24:25Z&st=2021-12-10T06:24:25Z&sip=0.0.0.0-255.255.255.255&spr=https,http&sig=tns4t766IuJynhbN9wzFP1Kq4hRqx8exMd4mFi751to%3D";
             let favouritesArray=[];
             for(const result of results){
                 if(result.verified===true){
@@ -106,6 +113,38 @@ module.exports.AddToFavourite=function(req,res){
        response.send(JSON.stringify({"favourites":arr})); 
         
    }
+
+   module.exports.InsertDummyData=async function(req,res){
+
+    function getRandomDate() {
+        var nr_days1 = 30*365;
+        var nr_days2 = -20*365;
+        var one_day=1000*60*60*24
+        var days = getRandomInt(nr_days2, nr_days1);
+        return new Date(days*one_day)
+    }
+    let arr=[];
+    for(let i=25;i<1050;i++)
+    {
+    let user={
+        email:"user"+i+"@gmail.com",
+        password:"oshinisbest",
+        username:"user"+i,
+        role:"user"
+    };
+    arr.push(user);
+    }
+    await Users.create(arr).then(function(){
+        console.log("Data inserted")  // Success
+    }).catch(function(error){
+        console.log(error)      // Failure
+    });
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({"done":arr})); 
+   }
+
+
+
 
 
 

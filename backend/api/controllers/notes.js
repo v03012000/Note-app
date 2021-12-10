@@ -15,7 +15,7 @@ module.exports.NotesRead =function(req, res) {
         new AzureKeyCredential(api_key)
       );
     const account = "noteitdown";
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-03-04T05:44:46Z&st=2021-11-19T21:44:46Z&sip=49.36.186.248&spr=https,http&sig=LQNXcjaGCtdPhBv5Bio04VO2j5lmac6%2F5N9kxp%2FlTi8%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-01-29T14:24:25Z&st=2021-12-10T06:24:25Z&sip=0.0.0.0-255.255.255.255&spr=https,http&sig=tns4t766IuJynhbN9wzFP1Kq4hRqx8exMd4mFi751to%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
@@ -27,7 +27,7 @@ module.exports.NotesRead =function(req, res) {
           //console.log(results);
           for (const result of results){
             if(result.verified===true){
-              //console.log("yes");
+              console.log(result.document_url);
               //const blob= new BlobClient(url);
               //let blobclient=containerClient.getBlobClient(blob.name);
               let obj={
@@ -176,15 +176,15 @@ module.exports.DeleteNotes=function(req,res){
           new AzureKeyCredential(api_key)
         );
       const account = "noteitdown";
-      const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2021-11-19T21:25:02Z&st=2021-11-19T13:25:02Z&sip=49.36.186.248&spr=https,http&sig=ytqJeSkVdQQaQm%2FXPi%2F%2F%2FHQzuR8pfjmdHJ4UGBUXc2Y%3D";
+      const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-01-29T14:24:25Z&st=2021-12-10T06:24:25Z&sip=0.0.0.0-255.255.255.255&spr=https,http&sig=tns4t766IuJynhbN9wzFP1Kq4hRqx8exMd4mFi751to%3D";
       const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
       const containerName = "uploadednotes";
       const containerClient=blobServiceClient.getContainerClient(containerName);
-    console.log(req.body);
+    console.log(req.params.id);
     Documents.findById(req.params.id,function(err,result){
       let resultsArray=[];
       if(!err){
-        console.log("Found");
+        console.log(result);
         let obj={
           "name":result.blobname,
           "sasToken":sas, 
@@ -198,7 +198,9 @@ module.exports.DeleteNotes=function(req,res){
           "reviews":result.reviews,
           "numReviews":result.numReviews,
           "id":result._id,
-          "uploaded_date":result.verified_date
+          "uploaded_date":result.verified_date,
+          "uploaded_by":result.uploaded_by
+
         
         } 
         resultsArray.push(obj);

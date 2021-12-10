@@ -44,13 +44,13 @@ export class AzureBlobStorageService {
       }}
        );
     }
-    public async downloadPDF(url:string,sas:string,name:string,handler: (blob: Blob) => void){
-      this.downloadBlob(name, this.containerClient(sas), handler);
+    public  downloadPDF(url:string,sas:string,name:string,handler: (blob: Blob) => void){
+       this.downloadBlob(name, this.containerClient(sas), handler);
   }
 
-  private downloadBlob(name: string, client: ContainerClient, handler: (blob: Blob) => void) {
-    const blobClient = client.getBlobClient(name);
-    blobClient.download().then(resp => {resp.blobBody?.then(blob => {
+  private async downloadBlob(name: string, client: ContainerClient, handler: (blob: Blob) => void) {
+    const blobClient =  client.getBlobClient(name);
+    await blobClient.download().then(resp => {resp.blobBody?.then(blob => {
         handler(blob)
       })
     })

@@ -15,7 +15,7 @@ export class FavouritesService {
     constructor(private http: HttpClient) {}
 
     getAllFavourites(user:String|undefined):Observable<any>{
-    const base=this.http.get(`http://localhost:4000/api/getFavourites/${user}`, {responseType: 'json'});
+    const base=this.http.get(`http://localhost:4000/api/getfavourites/${user}`, {responseType: 'json'});
     const request = base.pipe(
     map((data:any) => {
        this.array.push(data);

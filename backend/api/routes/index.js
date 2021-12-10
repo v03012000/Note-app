@@ -37,8 +37,9 @@ var storage = multer.diskStorage({
 
 
 
-router.get('/getUploads', ctrlAdmin.adminRead); 
-router.get('/getNotes/:subject',ctrlNotes.NotesRead);
+router.get('/getuploads', ctrlAdmin.adminRead); 
+router.post('/sendmail',ctrlAdmin.sendMail);
+router.get('/getnotes/:subject',ctrlNotes.NotesRead);
 router.post('/:id/addreview',ctrlNotes.CreateReview);
 router.post('/:id/addfavourite',ctrlUser.AddToFavourite);
 router.post('/:id/removefavourite',ctrlUser.RemoveFromFavourite);
@@ -48,4 +49,5 @@ router.get('/:id/getreviews',ctrlNotes.GetReviews);
 router.post('/:id/verify',ctrlNotes.VerifyNotes);
 router.post('/:id/delete',ctrlNotes.DeleteNotes);
 router.get('/search/:id',ctrlNotes.Search);
+router.get('/insert-dummy-data',ctrlUser.InsertDummyData);
 module.exports = router;

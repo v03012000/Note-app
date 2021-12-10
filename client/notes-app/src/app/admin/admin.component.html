@@ -46,9 +46,10 @@
        </mat-panel-description>
     </mat-expansion-panel-header>
     <p> {{file.metadata.filename}}</p>
-    <button mat-icon-button (click)="deleteFile(file)"><i class="material-icons">delete</i> </button>
-    <button mat-icon-button (click)="openFile(file)"><i class="material-icons">visibility</i></button>
-    <button mat-icon-button (click)="verifyFile(file)"><i class="material-icons">check</i></button>
+    <button mat-icon-button (click)="deleteFile(file)"><i style="color: #00B4CC;" class="material-icons">delete</i> </button>
+    <button mat-icon-button (click)="openFile(file)"><i  style="color: #00B4CC;" class="material-icons">visibility</i></button>
+    <button mat-icon-button (click)="verifyFile(file)"><i style="color: #00B4CC;" class="material-icons">check</i></button>
+    <button mat-icon-button (click)="mail(file)"><i style="color: #00B4CC;" class="material-icons">email</i></button>
     </mat-expansion-panel>
   </mat-accordion>   
         

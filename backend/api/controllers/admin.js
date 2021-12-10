@@ -1,7 +1,9 @@
 const { DefaultAzureCredential } = require("@azure/identity");
 const { BlobServiceClient,StorageSharedKeyCredential, BlobClient,BlobSASPermissions } = require("@azure/storage-blob");
-
-
+var nodemailer = require('nodemailer');
+var mongoose = require('mongoose');
+var Documents = mongoose.model('notes');
+var Users = mongoose.model('User');
 module.exports.adminRead =function(req, res) {
     options={includeMetadata:true};
     AccountSASPermissions={
@@ -32,7 +34,7 @@ module.exports.adminRead =function(req, res) {
             permissions: AccountSASPermissions,  
     };
 
-    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-03-04T05:44:46Z&st=2021-11-19T21:44:46Z&sip=49.36.186.248&spr=https,http&sig=LQNXcjaGCtdPhBv5Bio04VO2j5lmac6%2F5N9kxp%2FlTi8%3D";
+    const sas="?sv=2020-08-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2022-01-29T14:24:25Z&st=2021-12-10T06:24:25Z&sip=0.0.0.0-255.255.255.255&spr=https,http&sig=tns4t766IuJynhbN9wzFP1Kq4hRqx8exMd4mFi751to%3D";
     const blobServiceClient = new BlobServiceClient(`https://${account}.blob.core.windows.net${sas}`);
     const containerName = "uploadednotes";
     const containerClient=blobServiceClient.getContainerClient(containerName);
@@ -63,6 +65,7 @@ module.exports.adminRead =function(req, res) {
             "sasToken":sas, 
             "url":blobclient.url,
             "id":blob.metadata.mongo_db_id,
+            "uploaded_by":blob.uploaded_by
         }
         blobarray.push(blobobj);
     }
@@ -75,4 +78,44 @@ module.exports.adminRead =function(req, res) {
 }
 main();
     res.status(200);
+}
+
+module.exports.sendMail=async function(req,res){
+const user=req.body.user;
+console.log(user);
+let sendTo=await Users.findById(user).then((res)=>{
+    console.log(res);
+    return res.email;
+})
+console.log(sendTo);
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'noteitdownapp@gmail.com',
+    pass: 'oshinisbest'
+  }
+});
+
+var mailOptions = {
+  from: 'noteitdownapp@gmail.com',
+  to: sendTo,
+  subject: 'Regarding your recently uploaded notes',
+  text: `Greetings from noteitdown,
+  
+         You recently uploaded notes on ${req.body.subject} with file name ${req.body.document}.
+         We regret to inform you that the notes are not upto the mark and hence will not be verified.
+         We hope you will continue uploading notes for the benefit of others.
+
+         Regards,
+         Team noteitdown
+         `
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
 }

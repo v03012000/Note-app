@@ -35,6 +35,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FavouritesComponent } from './favourites/favourites.component';
 import { FavouritesService } from './services/favourites.service';
+import { SanitizeUrlPipe } from './sanitizeUrl.pipe';
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService]  },
   { path: 'login', component: LoginComponent },
@@ -59,6 +60,7 @@ const appRoutes: Routes = [
     DialogOverviewDialog,
     DialogSeeReview,
     FavouritesComponent,
+    SanitizeUrlPipe
   ],
   imports: [
     BrowserModule,

@@ -29,6 +29,10 @@ var notesSchema = new mongoose.Schema({
       unique: true,
       required: 'Not a valid document'
     },
+    uploaded_by:{
+      type: mongoose.Schema.Types.ObjectId,
+     required: true,
+    },
     filename: {
       type: String,
       required: 'file name can\'t be empty',
